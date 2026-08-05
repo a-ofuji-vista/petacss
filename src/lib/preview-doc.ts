@@ -2,6 +2,7 @@ import {
   inlinePreviewAssets,
   inlinePreviewCssAssets,
   inlinePreviewExternalScripts,
+  rewritePreviewMediaUrls,
 } from "./preview-assets.ts";
 import { PREVIEW_BRIDGE_MSG } from "./preview-bridge.ts";
 import {
@@ -20,18 +21,20 @@ export {
 } from "./preview-escape.ts";
 
 /**
- * 動画だけは data URI 化せず /snippets/... の URL のまま読み込むため、
+ * 動画だけは data URI 化せずサイト配信の絶対 URL で読み込むため、
  * media-src に配信元オリジンを明示する。sandbox 付き iframe / srcdoc は
  * opaque origin になり 'self' がどのオリジンにも一致しないため。
+ * assetBaseUrl は Astro base を含む場合があるので、CSP には origin だけ渡す。
  */
-function buildPreviewCsp(assetOrigin: string): string {
+function buildPreviewCsp(assetBaseUrl: string): string {
+  const mediaOrigin = new URL(assetBaseUrl).origin;
   return [
     "default-src 'none'",
     "style-src 'unsafe-inline' https://fonts.googleapis.com",
     "script-src 'unsafe-inline'",
     "font-src https://fonts.gstatic.com",
     "img-src data: blob:",
-    `media-src data: blob: ${assetOrigin}`,
+    `media-src data: blob: ${mediaOrigin}`,
     "connect-src 'none'",
   ].join("; ");
 }
@@ -149,7 +152,10 @@ const PREVIEW_BRIDGE_SCRIPT = escapeForScriptElement(`(function () {
 })();`);
 
 export interface PreviewDocOptions {
-  /** プレビュー内の絶対パス（/snippets/... など）を解決するオリジン。 */
+  /**
+   * Preview 内アセットのベース URL（Astro `base` を含む。末尾スラッシュなし）。
+   * 例: `http://localhost:4321/petacss`
+   */
   assetOrigin: string;
   resetCss: string;
   tokensCss: string;
@@ -215,7 +221,9 @@ export async function buildPreviewDoc({
   const safeResetCss = escapeForStyleElement(resetCss);
   const safeTokensCss = escapeForStyleElement(tokensCss);
   const safeCss = escapeForStyleElement(inlinePreviewCssAssets(css));
-  const htmlWithAssets = inlinePreviewAssets(html);
+  const htmlWithAssets = inlinePreviewAssets(
+    rewritePreviewMediaUrls(html, assetOrigin),
+  );
   // スニペット側の HTML だけを対象にエスケープしてから外部スクリプトを埋め込む。
   // 埋め込み後にエスケープすると、フェッチした第三者スクリプトの中身
   // （文字列リテラル等）に `</body>` 等が偶然含まれていた場合に書き換えてしまうため。

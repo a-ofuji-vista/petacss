@@ -7,9 +7,12 @@
   },
   "scripts": {
     "dev": "astro dev",
+    "predev": "node scripts/fetch-preview-videos.mjs",
     "check:labels": "node scripts/check-subcategory-labels.mjs",
     "check:slugs": "node scripts/check-snippet-slugs.mjs",
     "check:baseline": "node scripts/check-baseline.mjs",
+    "fetch:videos": "node scripts/fetch-preview-videos.mjs",
+    "prebuild": "node scripts/fetch-preview-videos.mjs",
     "build": "npm run check:labels && npm run check:slugs && astro build",
     "preview": "astro preview",
     "astro": "astro",

@@ -23,7 +23,7 @@
 
 /* snippet */
 .video-bg {
-  --video-fallback: #0f172a;
+  --video-fallback: #e4e4e2;
   --noise-image: url("/snippets/bg_noise.png");
   --noise-opacity: 0.3;
 
