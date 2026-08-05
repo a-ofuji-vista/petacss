@@ -71,6 +71,7 @@ function allowSandboxedPreviewMedia() {
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://petacss.yomosugara.net",
+  site: "https://a-ofuji-vista.github.io",
+  base: "/petacss",
   integrations: [sitemap(), allowSandboxedPreviewMedia()],
 });

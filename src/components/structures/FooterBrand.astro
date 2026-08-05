@@ -1,7 +1,17 @@
-<div class="l-footer-brand">
+---
+import { withBase } from "../../lib/paths.ts";
+
+const mascotSrc = withBase("brand/mascot.svg");
+const wordmarkUrl = `url("${withBase("brand/wordmark.svg")}")`;
+---
+
+<div
+  class="l-footer-brand"
+  style={`--footer-brand-wordmark: ${wordmarkUrl}`}
+>
   <img
     class="l-footer-brand__mascot"
-    src="/brand/mascot.svg"
+    src={mascotSrc}
     alt=""
     width="40"
     height="40"
@@ -26,7 +36,7 @@
     height: auto;
     aspect-ratio: 723 / 135;
     background-color: var(--color-bg-surface);
-    mask-image: url("/brand/wordmark.svg");
+    mask-image: var(--footer-brand-wordmark);
     mask-repeat: no-repeat;
     mask-position: center;
     mask-size: 100% 100%;

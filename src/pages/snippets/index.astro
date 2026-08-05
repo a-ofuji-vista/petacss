@@ -8,13 +8,14 @@ import {
   getCategoryTree,
   getSubCategoryCounts,
 } from "../../lib/snippets";
+import { withBase } from "../../lib/paths.ts";
 
 const subCategoryCounts = getSubCategoryCounts();
 const groups = getCategoryTree().map((t) => ({
   category: t.category,
   items: t.subCategories.map((sub) => ({
     name: sub.label,
-    href: `/snippets/${sub.slug}`,
+    href: withBase(`snippets/${sub.slug}`),
     count: subCategoryCounts.get(sub.slug) ?? 0,
   })),
 }));
@@ -63,7 +64,7 @@ const headings = groups.map((group) => ({
     }
   </div>
   <PrevNext
-    prev={{ href: "/changelog", label: "Update History" }}
+    prev={{ href: withBase("changelog"), label: "Update History" }}
     next={firstSub
       ? {
           href: firstSub.href,

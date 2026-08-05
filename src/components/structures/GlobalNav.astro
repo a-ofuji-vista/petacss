@@ -1,8 +1,9 @@
 ---
 import { getCategoryTree } from "../../lib/snippets";
+import { stripBase, withBase } from "../../lib/paths.ts";
 
 const tree = getCategoryTree();
-const current = Astro.url.pathname;
+const current = stripBase(Astro.url.pathname);
 ---
 
 <div class="l-global-nav js-global-nav">
@@ -39,7 +40,7 @@ const current = Astro.url.pathname;
               "l-global-nav__link",
               current === "/" && "l-global-nav__link--active",
             ]}
-            href="/">What is PETA CSS?</a
+            href={withBase()}>What is PETA CSS?</a
           >
         </li>
         <li class="l-global-nav__item">
@@ -48,7 +49,7 @@ const current = Astro.url.pathname;
               "l-global-nav__link",
               current === "/changelog" && "l-global-nav__link--active",
             ]}
-            href="/changelog">Update History</a
+            href={withBase("changelog")}>Update History</a
           >
         </li>
         <li class="l-global-nav__item">
@@ -57,7 +58,7 @@ const current = Astro.url.pathname;
               "l-global-nav__link",
               current === "/snippets" && "l-global-nav__link--active",
             ]}
-            href="/snippets">All snippets</a
+            href={withBase("snippets")}>All snippets</a
           >
         </li>
       </ul>
@@ -69,13 +70,14 @@ const current = Astro.url.pathname;
               <h2 class="l-global-nav__heading">{category}</h2>
               <ul class="l-global-nav__list">
                 {subCategories.map((sub) => {
-                  const href = `/snippets/${sub.slug}`;
+                  const path = `/snippets/${sub.slug}`;
+                  const href = withBase(`snippets/${sub.slug}`);
                   return (
                     <li class="l-global-nav__item">
                       <a
                         class:list={[
                           "l-global-nav__link",
-                          current.startsWith(href) &&
+                          current.startsWith(path) &&
                             "l-global-nav__link--active",
                         ]}
                         href={href}

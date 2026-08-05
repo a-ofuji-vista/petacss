@@ -2,6 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PrevNext from "../components/ui/PrevNext.astro";
 import SnippetCategoryCard from "../components/ui/SnippetCategoryCard.astro";
+import { withBase } from "../lib/paths.ts";
 import { getCategoryTree, getSubCategoryCounts } from "../lib/snippets";
 
 const FEATURED_SNIPPET_SLUGS = ["button", "card", "heading", "modal"];
@@ -10,7 +11,7 @@ const subCategoryCounts = getSubCategoryCounts();
 const allCategories = getCategoryTree().flatMap((t) =>
   t.subCategories.map((sub) => ({
     name: sub.label,
-    href: `/snippets/${sub.slug}`,
+    href: withBase(`snippets/${sub.slug}`),
     count: subCategoryCounts.get(sub.slug) ?? 0,
     slug: sub.slug,
   })),
@@ -43,7 +44,7 @@ const headings = [
 
     <img
       class="p-about__hero p-about__hero--light"
-      src="/images/about-hero-light.webp"
+      src={withBase("images/about-hero-light.webp")}
       alt="PETA CSS のイメージ"
       width="1404"
       height="790"
@@ -51,7 +52,7 @@ const headings = [
     />
     <img
       class="p-about__hero p-about__hero--dark"
-      src="/images/about-hero-dark.webp"
+      src={withBase("images/about-hero-dark.webp")}
       alt="PETA CSS のイメージ"
       width="1404"
       height="790"
@@ -114,7 +115,7 @@ const headings = [
       </ul>
     </div>
     <div class="p-about__cta">
-      <a class="p-about__cta-link" href="/snippets">
+      <a class="p-about__cta-link" href={withBase("snippets")}>
         <span class="p-about__cta-body">
           <span class="p-about__cta-label">All snippets</span>
           <span class="p-about__cta-hint">すべてのスニペットを見る</span>
@@ -132,7 +133,7 @@ const headings = [
       </a>
     </div>
   </article>
-  <PrevNext next={{ href: "/changelog", label: "Update History" }} />
+  <PrevNext next={{ href: withBase("changelog"), label: "Update History" }} />
 </BaseLayout>
 
 <style>

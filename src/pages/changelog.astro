@@ -6,6 +6,7 @@ import {
   formatChangelogDate,
   getChangelogSlug,
 } from "../lib/changelog";
+import { withBase } from "../lib/paths.ts";
 
 const headings = changelog.map((entry) => ({
   depth: 2,
@@ -63,8 +64,8 @@ const headings = changelog.map((entry) => ({
     </div>
   </article>
   <PrevNext
-    prev={{ href: "/", label: "What is PETA CSS?" }}
-    next={{ href: "/snippets", label: "All snippets" }}
+    prev={{ href: withBase(), label: "What is PETA CSS?" }}
+    next={{ href: withBase("snippets"), label: "All snippets" }}
   />
 </BaseLayout>
 

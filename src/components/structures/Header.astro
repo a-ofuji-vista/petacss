@@ -1,15 +1,20 @@
 ---
 import SearchModal from "../ui/SearchModal.astro";
 import ThemeToggle from "../ui/ThemeToggle.astro";
+import { withBase } from "../../lib/paths.ts";
 ---
 
 <header class="l-header">
   <div class="l-header__inner">
     <div class="l-header__logo">
-      <a class="l-header__logo-link" href="/" aria-label="PETA CSS トップ">
+      <a
+        class="l-header__logo-link"
+        href={withBase()}
+        aria-label="PETA CSS トップ"
+      >
         <img
           class="l-header__logo-image"
-          src="/brand/logo.svg"
+          src={withBase("brand/logo.svg")}
           alt="PETA CSS"
           width="89"
           height="24"

@@ -1,6 +1,7 @@
 ---
 import { release } from "../../lib/release";
 import { changelog, formatChangelogDate } from "../../lib/changelog";
+import { withBase } from "../../lib/paths.ts";
 
 const latestDate = changelog[0]?.date;
 ---
@@ -20,7 +21,7 @@ const latestDate = changelog[0]?.date;
           </time>
           {release.message}
         </span>
-        <a class="l-release-bar__link" href="/changelog">
+        <a class="l-release-bar__link" href={withBase("changelog")}>
           更新履歴を見る
           <svg
             class="l-release-bar__icon"

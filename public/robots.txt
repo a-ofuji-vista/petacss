@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://petacss.yomosugara.net/sitemap-index.xml
+Sitemap: https://a-ofuji-vista.github.io/petacss/sitemap-index.xml

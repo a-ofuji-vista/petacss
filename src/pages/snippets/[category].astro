@@ -3,6 +3,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import PageHeading from "../../components/ui/PageHeading.astro";
 import SnippetCard from "../../components/ui/SnippetCard.astro";
 import PrevNext from "../../components/ui/PrevNext.astro";
+import { withBase } from "../../lib/paths.ts";
 import { getAllSnippets, getCategoryTree } from "../../lib/snippets";
 
 export function getStaticPaths() {
@@ -26,13 +27,13 @@ export function getStaticPaths() {
         items,
         prev: prevSub
           ? {
-              href: `/snippets/${prevSub.slug}`,
+              href: withBase(`snippets/${prevSub.slug}`),
               label: prevSub.label,
             }
-          : { href: "/snippets", label: "All snippets" },
+          : { href: withBase("snippets"), label: "All snippets" },
         next: nextSub
           ? {
-              href: `/snippets/${nextSub.slug}`,
+              href: withBase(`snippets/${nextSub.slug}`),
               label: nextSub.label,
             }
           : undefined,

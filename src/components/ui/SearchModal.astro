@@ -1,12 +1,13 @@
 ---
 import { getCategoryTree } from "../../lib/snippets";
+import { withBase } from "../../lib/paths.ts";
 
 const categories = getCategoryTree().flatMap((t) =>
   t.subCategories.map((sub) => ({
     slug: sub.slug,
     label: sub.label,
     labelJa: sub.labelJa,
-    href: `/snippets/${sub.slug}`,
+    href: withBase(`snippets/${sub.slug}`),
   })),
 );
 ---

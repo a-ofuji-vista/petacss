@@ -3,7 +3,7 @@
 Web サイトでよく使う UI パーツを、コピー＆ペーストですぐ使える形で公開しているスニペット集です。
 特定のフレームワークに縛られず、HTML / CSS / JavaScript をそのままコピーして、どんなプロジェクトにも取り込めます。Google Fonts や Embla Carousel などが必要なスニペットもありますが、依存関係は各スニペットに記載しています。
 
-本番サイト： https://petacss.yomosugara.net/
+本番サイト： https://a-ofuji-vista.github.io/petacss/
 
 ## 特徴
 
@@ -55,29 +55,23 @@ npm run dev
 
 ## 本番デプロイ
 
-本サイトは静的サイト（Astro）のため、ビルド成果物を Web サーバーに配置するだけで公開できます。ホスティングは Xserver を想定しています。
+本サイトは GitHub Pages（`https://a-ofuji-vista.github.io/petacss/`）で公開します。`main` への push で GitHub Actions がビルドし、Pages へデプロイします。
 
-### 1. ビルド
+### 初回セットアップ
 
-Node.js v22.12.0 以上の環境で次を実行します。
+1. GitHub リポジトリの **Settings → Pages → Build and deployment** で Source を **GitHub Actions** にする
+2. `main` に push（または Actions の **Deploy to GitHub Pages** を手動実行）する
+3. Actions 成功後、https://a-ofuji-vista.github.io/petacss/ で表示を確認する
+
+### ローカルでビルド結果を確認する
 
 ```bash
 npm ci
 npm run build
+npm run preview
 ```
 
-`dist/` に静的ファイルが出力されます。
-
-### 2. アップロード
-
-`dist/` の中身を、Xserver の公開ディレクトリ（例：`public_html/` またはドメインに紐づくディレクトリ）へアップロードします。
-
-- FTP / SFTP クライアント、またはサーバーパネルのファイルマネージャーを利用できます
-- `dist/` フォルダ自体ではなく、**中身** を公開ディレクトリのルートに配置してください
-
-### 3. SSL の有効化
-
-Xserver サーバーパネルの「SSL 設定」から無料 SSL（Let's Encrypt など）を有効にし、HTTPS でアクセスできることを確認してください。
+`base` が `/petacss` のため、プレビューは `http://localhost:4321/petacss/` で確認します。
 
 ## サイト構成
 
