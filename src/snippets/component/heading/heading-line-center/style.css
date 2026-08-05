@@ -1,0 +1,28 @@
+/* reset */
+:where(h2).heading-line-center {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-line-center {
+  --heading-color: #364153;
+  --heading-line-color: #e7e7e7;
+
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+
+  &::before,
+  &::after {
+    flex: 1;
+    height: 1px;
+    content: "";
+    background-color: var(--heading-line-color);
+  }
+}

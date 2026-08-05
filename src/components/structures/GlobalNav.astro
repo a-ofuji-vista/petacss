@@ -1,0 +1,289 @@
+---
+import { getCategoryTree } from "../../lib/snippets";
+
+const tree = getCategoryTree();
+const current = Astro.url.pathname;
+---
+
+<div class="l-global-nav js-global-nav">
+  <dialog
+    id="l-global-nav-dialog"
+    class="l-global-nav__dialog js-global-nav-dialog"
+  >
+    <div class="l-global-nav__bar">
+      <button
+        class="l-global-nav__close js-global-nav-close"
+        type="button"
+        aria-label="メニューを閉じる"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M5 5l12 12M17 5L5 17"
+            stroke="currentColor"
+            stroke-width="1.8"></path>
+        </svg>
+      </button>
+    </div>
+
+    <nav class="l-global-nav__nav" aria-label="グローバルナビ">
+      <ul class="l-global-nav__list">
+        <li class="l-global-nav__item">
+          <a
+            class:list={[
+              "l-global-nav__link",
+              current === "/" && "l-global-nav__link--active",
+            ]}
+            href="/">What is PETA CSS?</a
+          >
+        </li>
+        <li class="l-global-nav__item">
+          <a
+            class:list={[
+              "l-global-nav__link",
+              current === "/changelog" && "l-global-nav__link--active",
+            ]}
+            href="/changelog">Update History</a
+          >
+        </li>
+        <li class="l-global-nav__item">
+          <a
+            class:list={[
+              "l-global-nav__link",
+              current === "/snippets" && "l-global-nav__link--active",
+            ]}
+            href="/snippets">All snippets</a
+          >
+        </li>
+      </ul>
+
+      <div class="l-global-nav__categories">
+        {
+          tree.map(({ category, subCategories }) => (
+            <section class="l-global-nav__section">
+              <h2 class="l-global-nav__heading">{category}</h2>
+              <ul class="l-global-nav__list">
+                {subCategories.map((sub) => {
+                  const href = `/snippets/${sub.slug}`;
+                  return (
+                    <li class="l-global-nav__item">
+                      <a
+                        class:list={[
+                          "l-global-nav__link",
+                          current.startsWith(href) &&
+                            "l-global-nav__link--active",
+                        ]}
+                        href={href}
+                      >
+                        {sub.label}
+                      </a>
+                    </li>
+                  );
+                })}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+    </nav>
+  </dialog>
+</div>
+
+<style>
+  .l-global-nav {
+    display: contents;
+  }
+
+  @media (width > 960px) {
+    .l-global-nav {
+      position: sticky;
+      top: var(--layout-header-height);
+      display: block;
+      align-self: start;
+      padding-block: var(--space-16);
+      padding-inline: var(--space-6);
+    }
+  }
+
+  @layer nav-dialog-mobile, nav-dialog-desktop;
+
+  @layer nav-dialog-mobile {
+    .l-global-nav__dialog {
+      position: fixed;
+      inset: 0;
+      z-index: var(--z-nav-dialog);
+      display: grid;
+      grid-template-rows: var(--layout-header-height) minmax(0, 1fr);
+      row-gap: var(--space-4);
+      width: 100%;
+      max-width: none;
+      height: 100dvh;
+      max-height: none;
+      padding-block: 0 var(--space-8);
+      padding-inline: var(--space-6);
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      background-color: var(--color-bg-default);
+      opacity: 0;
+      translate: 0 calc(var(--space-6) * -1);
+      transition:
+        opacity var(--transition-slow),
+        translate var(--transition-slow),
+        display 0.4s allow-discrete,
+        overlay 0.4s allow-discrete;
+    }
+
+    .l-global-nav__dialog:not([open]) {
+      display: none;
+    }
+
+    .l-global-nav__dialog[open] {
+      display: grid;
+      opacity: 1;
+      translate: 0 0;
+    }
+
+    @starting-style {
+      .l-global-nav__dialog[open] {
+        opacity: 0;
+        translate: 0 calc(var(--space-6) * -1);
+      }
+    }
+
+    .l-global-nav__dialog::backdrop {
+      background-color: transparent;
+    }
+  }
+
+  @layer nav-dialog-desktop {
+    @media (width > 960px) {
+      .l-global-nav__dialog {
+        position: static;
+        display: block;
+        width: auto;
+        height: auto;
+        padding: 0;
+        overflow: visible;
+        background-color: transparent;
+        opacity: 1;
+        translate: none;
+        transition: none;
+      }
+    }
+  }
+
+  .l-global-nav__bar {
+    display: grid;
+    align-items: center;
+    justify-content: end;
+    width: 100%;
+    max-width: var(--layout-max-width);
+    min-height: var(--layout-header-height);
+    margin-inline: auto;
+  }
+
+  @media (width > 960px) {
+    .l-global-nav__bar {
+      display: none;
+    }
+  }
+
+  .l-global-nav__close {
+    display: grid;
+    place-items: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+    color: var(--color-fg-default);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (any-hover: hover) {
+    .l-global-nav__close {
+      transition: background-color var(--transition-fast);
+    }
+
+    .l-global-nav__close:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  .l-global-nav__close svg {
+    display: block;
+  }
+
+  .l-global-nav__nav {
+    display: grid;
+    grid-auto-flow: row;
+    row-gap: var(--space-8);
+    align-self: start;
+  }
+
+  .l-global-nav__categories {
+    display: grid;
+    row-gap: var(--space-8);
+    padding-bottom: var(--space-8);
+  }
+
+  .l-global-nav__heading {
+    margin-bottom: var(--space-3);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-fg-default);
+  }
+
+  .l-global-nav__item {
+    border-left: 2px solid var(--color-border-default);
+  }
+
+  .l-global-nav__item:has(.l-global-nav__link--active) {
+    border-left-color: var(--color-accent);
+  }
+
+  .l-global-nav__list {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+
+  .l-global-nav__link {
+    display: block;
+    padding-block: var(--space-2);
+    padding-inline: var(--space-2);
+    margin-left: var(--space-2);
+    font-size: var(--font-size-sm);
+    color: var(--color-fg-subtle);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (any-hover: hover) {
+    .l-global-nav__link {
+      transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+    }
+
+    .l-global-nav__link:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  @media (width > 960px) and (any-hover: hover) {
+    .l-global-nav__link:hover {
+      background-color: var(--color-bg-main);
+    }
+  }
+
+  .l-global-nav__link--active {
+    color: var(--color-accent);
+  }
+</style>
+
+<script>
+  import "../../scripts/global-nav.ts";
+</script>

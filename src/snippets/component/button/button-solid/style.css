@@ -1,0 +1,59 @@
+/* reset */
+:where(a, button).button-solid {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-solid {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-solid {
+  --button-background: #2b36f5;
+  --button-background-hover: #1f28a8;
+  --button-color: #fff;
+  --button-focus-color: #2b36f5;
+
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border-radius: calc(infinity * 1px);
+
+  @media (any-hover: hover) {
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--button-background-hover);
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-solid {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

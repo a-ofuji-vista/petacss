@@ -1,0 +1,33 @@
+/* reset */
+:where(h2).heading-underline-accent-left {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-underline-accent-left {
+  --heading-color: #364153;
+  --heading-accent: #2b36f5;
+  --heading-line-color: #e7e7e7;
+  --heading-accent-width: 40px;
+  --heading-accent-height: 2px;
+
+  position: relative;
+  width: 100%;
+  padding-bottom: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+  border-bottom: var(--heading-accent-height) solid var(--heading-line-color);
+
+  &::after {
+    position: absolute;
+    bottom: calc(var(--heading-accent-height) * -1);
+    left: 0;
+    width: var(--heading-accent-width);
+    height: var(--heading-accent-height);
+    content: "";
+    background-color: var(--heading-accent);
+  }
+}

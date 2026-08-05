@@ -1,0 +1,7 @@
+{
+  "title": "Header basic",
+  "order": 1,
+  "description": "左にロゴ、右にメニュー。768px未満でハンバーガーメニュー。",
+  "previewPlacement": "start",
+  "previewPadding": false
+}

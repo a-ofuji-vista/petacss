@@ -1,0 +1,123 @@
+/* reset */
+:where(a, button).button-icon-arrow {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-icon-arrow {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-icon-arrow {
+  --button-background: #2b36f5;
+  --button-background-hover: #1f28a8;
+  --button-color: #fff;
+  --button-focus-color: #2b36f5;
+
+  display: inline-grid;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border-radius: calc(infinity * 1px);
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @media (any-hover: hover) {
+    transition: background-color 0.3s;
+
+    svg {
+      transition: transform 0.3s;
+    }
+
+    &:hover {
+      background-color: var(--button-background-hover);
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+.button-icon-arrow--right {
+  &::before {
+    content: "";
+  }
+
+  svg {
+    grid-column: 3;
+    justify-self: end;
+  }
+
+  @media (any-hover: hover) {
+    &:hover svg {
+      transform: translateX(4px);
+    }
+  }
+}
+
+.button-icon-arrow--left {
+  &::after {
+    content: "";
+  }
+
+  svg {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  @media (any-hover: hover) {
+    &:hover svg {
+      transform: translateX(-4px);
+    }
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-icon-arrow {
+    @media (any-hover: hover) {
+      transition: none;
+
+      svg {
+        transition: none;
+      }
+    }
+  }
+
+  .button-icon-arrow--right,
+  .button-icon-arrow--left {
+    @media (any-hover: hover) {
+      &:hover svg {
+        transform: none;
+      }
+    }
+  }
+}

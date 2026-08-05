@@ -1,0 +1,72 @@
+/* reset */
+:where(a, button).button-hover-press {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-hover-press {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-hover-press {
+  --button-background: #2b36f5;
+  --button-shadow-color: #1a2080;
+  --button-color: #fff;
+  --button-focus-color: #2b36f5;
+  --button-depth: 6px;
+  --button-duration: 0.4s;
+  --button-easing: cubic-bezier(0.65, 0, 0.35, 1);
+
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border-radius: calc(infinity * 1px);
+  box-shadow: 0 var(--button-depth) 0 var(--button-shadow-color);
+  transform: translateY(0);
+
+  @media (any-hover: hover) {
+    transition:
+      transform var(--button-duration) var(--button-easing),
+      box-shadow var(--button-duration) var(--button-easing);
+
+    &:hover {
+      box-shadow: 0 0 0 var(--button-shadow-color);
+      transform: translateY(var(--button-depth));
+    }
+  }
+
+  &:active {
+    box-shadow: 0 0 0 var(--button-shadow-color);
+    transform: translateY(var(--button-depth));
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-hover-press {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

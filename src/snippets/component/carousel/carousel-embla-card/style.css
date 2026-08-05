@@ -1,0 +1,280 @@
+/* Embla Carousel を CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* 初期化 JS（script.js）は CDN 読み込みより後に配置してください。 */
+
+/* --carousel-slide-size でスライド幅を変更できます。 */
+
+/* --carousel-gap でスライド間隔を変更できます。 */
+
+/* reset */
+:where(.carousel-embla-card),
+:where(.card-image-text) {
+  box-sizing: border-box;
+}
+
+:where(h3).card-image-text__title,
+:where(p).card-image-text__text {
+  margin: 0;
+  font: inherit;
+}
+
+:where(img).card-image-text__image {
+  display: block;
+}
+
+:where(a, button).card-image-text__button {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).carousel-embla-card__arrow,
+:where(button).carousel-embla-card__dot {
+  box-sizing: border-box;
+  padding: 0;
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* card-image-text */
+.card-image-text {
+  --card-background: #fff;
+  --card-border: #e7e7e7;
+  --card-title-color: #364153;
+  --card-text-color: #5e6775;
+  --card-button-background: #2b36f5;
+  --card-button-background-hover: #1f28a8;
+  --card-button-color: #fff;
+  --card-focus-color: #2b36f5;
+
+  display: grid;
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+
+.card-image-text__media {
+  aspect-ratio: 16 / 9;
+}
+
+.card-image-text__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-image-text__body {
+  padding: 24px;
+}
+
+.card-image-text__title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--card-title-color);
+}
+
+.card-image-text__text {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--card-text-color);
+}
+
+.card-image-text__button {
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  padding: 12px 24px;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--card-button-color);
+  background-color: var(--card-button-background);
+  border-radius: calc(infinity * 1px);
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--card-focus-color);
+    outline-offset: 2px;
+  }
+
+  @media (any-hover: hover) {
+    transition: background-color 0.3s;
+
+    &:hover {
+      background-color: var(--card-button-background-hover);
+    }
+  }
+}
+
+/* carousel */
+.carousel-embla-card {
+  --carousel-slide-size: min(85%, 320px);
+  --carousel-gap: 16px;
+  --carousel-control-size: 40px;
+  --carousel-control-border: #e7e7e7;
+  --carousel-control-background: #fff;
+  --carousel-control-background-hover: #f5f6f8;
+  --carousel-control-color: #364153;
+  --carousel-control-accent: #2b36f5;
+  --carousel-control-focus-color: #2b36f5;
+  --carousel-dot-size: 8px;
+  --carousel-dot-color: #c8c4bc;
+  --carousel-dot-color-selected: #2b36f5;
+  --carousel-duration: 0.2s;
+  --carousel-easing: ease;
+
+  width: 100%;
+
+  @media (width >= 640px) {
+    --carousel-slide-size: calc((100% - var(--carousel-gap)) / 2);
+  }
+
+  @media (width >= 960px) {
+    --carousel-slide-size: calc((100% - 2 * var(--carousel-gap)) / 3);
+  }
+}
+
+.carousel-embla-card__viewport {
+  overflow: hidden;
+}
+
+.carousel-embla-card__container {
+  display: flex;
+  margin-left: calc(var(--carousel-gap) * -1);
+}
+
+.carousel-embla-card__slide {
+  flex: 0 0 var(--carousel-slide-size);
+  min-width: 0;
+  padding-left: var(--carousel-gap);
+}
+
+.carousel-embla-card__slide > .card-image-text {
+  grid-template-rows: auto 1fr;
+  height: 100%;
+
+  & .card-image-text__body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  & .card-image-text__text {
+    flex: 1;
+  }
+}
+
+.carousel-embla-card__footer {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+}
+
+.carousel-embla-card__arrows {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.carousel-embla-card__arrow {
+  display: grid;
+  place-items: center;
+  width: var(--carousel-control-size);
+  height: var(--carousel-control-size);
+  color: var(--carousel-control-color);
+  background-color: var(--carousel-control-background);
+  border: 1px solid var(--carousel-control-border);
+  border-radius: 8px;
+
+  svg {
+    width: 16px;
+    height: 16px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--carousel-control-focus-color);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.4;
+  }
+
+  @media (any-hover: hover) {
+    transition:
+      color var(--carousel-duration) var(--carousel-easing),
+      background-color var(--carousel-duration) var(--carousel-easing),
+      border-color var(--carousel-duration) var(--carousel-easing);
+
+    &:not(:disabled):hover {
+      color: var(--carousel-control-accent);
+      background-color: var(--carousel-control-background-hover);
+      border-color: var(--carousel-control-accent);
+    }
+  }
+}
+
+.carousel-embla-card__pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.carousel-embla-card__dot {
+  width: var(--carousel-dot-size);
+  height: var(--carousel-dot-size);
+  background-color: var(--carousel-dot-color);
+  border-radius: 50%;
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--carousel-control-focus-color);
+    outline-offset: 2px;
+  }
+
+  @media (any-hover: hover) {
+    transition: background-color var(--carousel-duration) var(--carousel-easing);
+
+    &:hover {
+      background-color: var(--carousel-dot-color-selected);
+    }
+  }
+}
+
+.carousel-embla-card__dot--selected {
+  background-color: var(--carousel-dot-color-selected);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carousel-embla-card__arrow,
+  .carousel-embla-card__dot {
+    transition: none;
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "title": "Breadcrumb basic",
+  "order": 1,
+  "description": "パンくずリスト。区切りに右向き矢印（>）を使用。",
+  "previewBackground": "#fff"
+}

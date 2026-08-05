@@ -1,0 +1,109 @@
+/* Google Fonts の Barlow（Bold）が必要です。head.html を <head> に追加してください。 */
+
+/* テキストの長さに応じて --marquee-duration を調整してください。 */
+
+/* --marquee-block-start で流れるテキストの高さ位置を変更できます。 */
+
+/* reset */
+:where(.heading-marquee-bg),
+:where(.heading-marquee-bg__content) {
+  box-sizing: border-box;
+}
+
+:where(p).heading-marquee-bg__caption,
+:where(h2).heading-marquee-bg__title {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-marquee-bg {
+  --marquee-color: #e7e7e7;
+  --marquee-duration: 50s;
+  --marquee-block-start: 35%;
+  --caption-color: #2b36f5;
+  --heading-color: #1e2939;
+
+  position: relative;
+  display: grid;
+  place-items: center start;
+  width: 100%;
+  padding-block: 24px;
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.heading-marquee-bg__marquee {
+  position: absolute;
+  inset-block-start: var(--marquee-block-start);
+  inset-inline: 0;
+  z-index: 0;
+  display: flex;
+  overflow-x: hidden;
+  overflow-x: clip;
+  transform: translateY(-50%);
+}
+
+.heading-marquee-bg__marquee::before,
+.heading-marquee-bg__marquee::after {
+  flex-shrink: 0;
+  padding-block: 0.05em;
+  font-family: barlow, sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--marquee-color);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  content: attr(data-text) "\2002" attr(data-text) "\2002" attr(data-text)
+    "\2002" attr(data-text) "\2002" attr(data-text) "\2002" attr(data-text)
+    "\2002" attr(data-text) "\2002" attr(data-text) "\2002";
+  animation: heading-marquee-bg-scroll var(--marquee-duration) linear infinite;
+}
+
+@supports (-webkit-text-stroke: 1px #000) {
+  .heading-marquee-bg__marquee::before,
+  .heading-marquee-bg__marquee::after {
+    color: transparent;
+    paint-order: stroke fill;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--marquee-color);
+  }
+}
+
+.heading-marquee-bg__content {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 100%;
+  padding-inline: 24px;
+  text-align: start;
+}
+
+.heading-marquee-bg__caption {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--caption-color);
+  letter-spacing: 0.08em;
+}
+
+.heading-marquee-bg__title {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+}
+
+@keyframes heading-marquee-bg-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heading-marquee-bg__marquee::before,
+  .heading-marquee-bg__marquee::after {
+    animation: none;
+  }
+}

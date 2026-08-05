@@ -1,0 +1,39 @@
+{
+  "name": "petacss",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "check:labels": "node scripts/check-subcategory-labels.mjs",
+    "check:slugs": "node scripts/check-snippet-slugs.mjs",
+    "check:baseline": "node scripts/check-baseline.mjs",
+    "build": "npm run check:labels && npm run check:slugs && astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write \"src/**/*.{astro,ts,tsx,js,jsx,html,css,json}\"",
+    "format:check": "prettier --check \"src/**/*.{astro,ts,tsx,js,jsx,html,css,json}\"",
+    "lint:css": "stylelint \"src/**/*.{css,astro}\"",
+    "lint:css:fix": "stylelint --fix \"src/**/*.{css,astro}\""
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@mdn/browser-compat-data": "^8.0.5",
+    "astro": "^6.3.6",
+    "highlight.js": "^11.11.1",
+    "web-features": "^3.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.12.0",
+    "destyle.css": "^4.0.1",
+    "postcss-html": "^1.8.1",
+    "prettier": "^3.8.3",
+    "prettier-plugin-astro": "^0.14.1",
+    "stylelint": "^17.12.0",
+    "stylelint-config-html": "^1.1.0",
+    "stylelint-config-recess-order": "^7.7.0",
+    "stylelint-config-standard": "^40.0.0"
+  }
+}

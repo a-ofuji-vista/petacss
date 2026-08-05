@@ -1,0 +1,52 @@
+/* ノイズテクスチャ画像を別途用意してください。サンプルでは /snippets/bg_noise.png を使用しています。 */
+
+/* --noise-opacity でテクスチャの濃さを調整できます。 */
+
+/* --noise-background で下地の背景色を変更できます。 */
+
+/* reset */
+:where(.noise-texture-bg) {
+  box-sizing: border-box;
+}
+
+:where(p).noise-texture-bg__text {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.noise-texture-bg {
+  --noise-background: #2b36f5;
+  --noise-image: url("/snippets/bg_noise.png");
+  --noise-opacity: 0.3;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 24px;
+  overflow: hidden;
+  background-color: var(--noise-background);
+  isolation: isolate;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: "";
+    background-image: var(--noise-image);
+    background-repeat: repeat;
+    opacity: var(--noise-opacity);
+  }
+}
+
+.noise-texture-bg__text {
+  position: relative;
+  z-index: 1;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #fff;
+}

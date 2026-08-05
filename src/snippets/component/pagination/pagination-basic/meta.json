@@ -1,0 +1,6 @@
+{
+  "title": "Pagination basic",
+  "order": 1,
+  "description": "ページネーション。前後ボタン・ページ番号・省略記号を表示し、現在ページは aria-current=\"page\" で示す。",
+  "previewBackground": "#fff"
+}

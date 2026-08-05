@@ -1,0 +1,117 @@
+/* reset */
+:where(p).tab-slide-highlight__text {
+  margin: 0;
+  font: inherit;
+}
+
+:where(button).tab-slide-highlight__tab {
+  box-sizing: border-box;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* snippet */
+.tab-slide-highlight {
+  --tab-text-color: #5e6775;
+  --tab-text-color-active: #364153;
+  --tab-accent: #2b36f5;
+  --tab-border: #e7e7e7;
+  --tab-focus-color: var(--tab-accent);
+  --tab-radius: 4px;
+  --tab-duration: 0.3s;
+  --tab-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  width: 100%;
+  max-width: 480px;
+}
+
+.tab-slide-highlight__list {
+  position: relative;
+  display: grid;
+  grid-auto-columns: 1fr;
+  grid-auto-flow: column;
+  gap: 4px;
+  border-bottom: 1px solid var(--tab-border);
+}
+
+.tab-slide-highlight__indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  z-index: 1;
+  width: var(--indicator-width, 0);
+  height: 2px;
+  pointer-events: none;
+  background-color: var(--tab-accent);
+  border-radius: calc(infinity * 1px);
+  transform: translateX(var(--indicator-left, 0));
+  transition:
+    transform var(--tab-duration) var(--tab-easing),
+    width var(--tab-duration) var(--tab-easing);
+}
+
+.tab-slide-highlight__tab {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-height: var(--size-touch-target, 40px);
+  padding-block: 12px;
+  padding-inline: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--tab-text-color);
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0;
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--tab-focus-color);
+    outline-offset: -2px;
+  }
+}
+
+.tab-slide-highlight__tab--active {
+  color: var(--tab-text-color-active);
+}
+
+.tab-slide-highlight__panels {
+  display: grid;
+}
+
+.tab-slide-highlight__panel {
+  display: none;
+  grid-area: 1 / 1;
+}
+
+.tab-slide-highlight__panel--active {
+  display: block;
+}
+
+.tab-slide-highlight__text {
+  padding-block: 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--tab-text-color);
+}
+
+@media (any-hover: hover) {
+  .tab-slide-highlight__tab:not(.tab-slide-highlight__tab--active):hover {
+    color: var(--tab-text-color-active);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab-slide-highlight__indicator {
+    transition: none;
+  }
+}

@@ -1,0 +1,114 @@
+/* reset */
+:where(p).tab-index__text {
+  margin: 0;
+  font: inherit;
+}
+
+:where(button).tab-index__tab {
+  box-sizing: border-box;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+/* snippet */
+.tab-index {
+  --tab-text-color: #5e6775;
+  --tab-text-color-active: #364153;
+  --tab-accent: #2b36f5;
+  --tab-border: #e7e7e7;
+  --tab-bg: #fff;
+  --tab-bg-inactive: #f5f5f5;
+  --tab-focus-color: var(--tab-accent);
+  --tab-radius: 4px;
+
+  width: 100%;
+}
+
+.tab-index__list {
+  display: flex;
+  align-items: flex-end;
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.tab-index__tab {
+  position: relative;
+  display: grid;
+  flex: 1;
+  place-items: center;
+  min-height: var(--size-touch-target, 40px);
+  padding-block: 12px;
+  padding-inline: 16px;
+  margin-left: -1px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--tab-text-color);
+  background-color: var(--tab-bg-inactive);
+  border: 1px solid var(--tab-border);
+  border-bottom: none;
+  border-radius: var(--tab-radius) var(--tab-radius) 0 0;
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    z-index: 2;
+    outline: 2px solid var(--tab-focus-color);
+    outline-offset: -2px;
+  }
+}
+
+.tab-index__tab--active {
+  z-index: 1;
+  padding-bottom: calc(12px + 1px);
+  margin-bottom: -1px;
+  color: var(--tab-text-color-active);
+  background-color: var(--tab-bg);
+}
+
+.tab-index__panels {
+  width: 100%;
+  background-color: var(--tab-bg);
+  border-top: 1px solid var(--tab-border);
+}
+
+.tab-index__panel {
+  display: none;
+}
+
+.tab-index__panel--active {
+  display: block;
+}
+
+.tab-index__inner {
+  width: 100%;
+  max-width: 480px;
+  padding-block: 16px;
+  padding-inline: 16px;
+  margin-inline: auto;
+}
+
+.tab-index__text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--tab-text-color);
+}
+
+@media (any-hover: hover) {
+  .tab-index__tab:not(.tab-index__tab--active):hover {
+    color: var(--tab-text-color-active);
+  }
+}

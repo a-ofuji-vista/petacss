@@ -1,0 +1,8 @@
+{
+  "title": "Profile table",
+  "order": 1,
+  "description": "会社概要などの項目一覧。table / tr / th / td で、行ごとに項目名と内容を並べます。モバイルで縦積みにしたい場合は profile-dl を推奨。",
+  "previewScroll": true,
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

@@ -1,0 +1,412 @@
+---
+import { getCategoryTree } from "../../lib/snippets";
+
+const categories = getCategoryTree().flatMap((t) =>
+  t.subCategories.map((sub) => ({
+    slug: sub.slug,
+    label: sub.label,
+    labelJa: sub.labelJa,
+    href: `/snippets/${sub.slug}`,
+  })),
+);
+---
+
+<div class="c-search js-search">
+  <button
+    class="c-search__toggle js-search-open"
+    type="button"
+    aria-haspopup="dialog"
+    aria-controls="c-search-dialog"
+    aria-keyshortcuts="Control+K Meta+K"
+    aria-label="カテゴリを検索"
+  >
+    <svg
+      class="c-search__toggle-icon"
+      width="20"
+      height="20"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="M20 20l-3.5-3.5"></path>
+    </svg>
+    <span class="c-search__toggle-label" aria-hidden="true">検索</span>
+    <kbd class="c-search__shortcut js-search-shortcut" aria-hidden="true">
+      Ctrl K
+    </kbd>
+  </button>
+
+  <dialog id="c-search-dialog" class="c-search__dialog js-search-dialog">
+    <div class="c-search__panel">
+      <div class="c-search__field">
+        <svg
+          class="c-search__field-icon"
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7"></circle>
+          <path d="M20 20l-3.5-3.5"></path>
+        </svg>
+        <input
+          class="c-search__input js-search-input"
+          type="search"
+          placeholder="カテゴリを検索..."
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="カテゴリを検索"
+        />
+        <button
+          class="c-search__close js-search-close"
+          type="button"
+          aria-label="検索を閉じる"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 22 22"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 5l12 12M17 5L5 17"
+              stroke="currentColor"
+              stroke-width="1.8"></path>
+          </svg>
+        </button>
+      </div>
+
+      <ul class="c-search__list js-search-list" aria-label="スニペットカテゴリ">
+        {
+          categories.map((category) => (
+            <li
+              class="c-search__item js-search-item"
+              data-label={category.label}
+              data-label-ja={category.labelJa}
+              data-slug={category.slug}
+            >
+              <a class="c-search__link" href={category.href}>
+                <span class="c-search__label">{category.label}</span>
+                <span class="c-search__label-ja">{category.labelJa}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="c-search__empty js-search-empty" hidden>
+        該当するカテゴリがありません
+      </p>
+    </div>
+  </dialog>
+</div>
+
+<style>
+  .c-search {
+    display: contents;
+  }
+
+  .c-search__toggle {
+    display: grid;
+    place-items: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+    color: var(--color-fg-default);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  .c-search__toggle-label,
+  .c-search__shortcut {
+    display: none;
+  }
+
+  @media (any-hover: hover) {
+    .c-search__toggle {
+      transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast);
+    }
+
+    .c-search__toggle:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  @media (width > 960px) {
+    .c-search__toggle {
+      display: flex;
+      gap: var(--space-2);
+      align-items: center;
+      width: auto;
+      height: auto;
+      min-height: calc(var(--size-touch-target) - var(--space-1));
+      padding-block: var(--space-1);
+      padding-inline: var(--space-3) var(--space-2);
+      color: var(--color-fg-subtle);
+      border: 1px solid var(--color-border-default);
+      border-radius: var(--radius-sm);
+    }
+
+    .c-search__toggle-icon {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+    }
+
+    .c-search__toggle-label {
+      display: inline;
+      margin-inline-end: var(--space-4);
+      font-size: var(--font-size-sm);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-base);
+      white-space: nowrap;
+    }
+
+    .c-search__shortcut {
+      display: inline-grid;
+      place-items: center;
+      min-height: 1.5rem;
+      padding-block: 0.125rem;
+      padding-inline: var(--space-2);
+      margin-inline-start: auto;
+      font-family: inherit;
+      font-size: var(--font-size-xs);
+      font-weight: var(--font-weight-medium);
+      line-height: var(--line-height-base);
+      color: var(--color-fg-subtle);
+      white-space: nowrap;
+      background-color: var(--color-bg-surface);
+      border: 1px solid var(--color-border-default);
+      border-radius: calc(var(--radius-sm) - 2px);
+    }
+
+    @media (any-hover: hover) {
+      .c-search__toggle:hover {
+        color: var(--color-fg-default);
+        background-color: var(--color-bg-surface);
+      }
+    }
+  }
+
+  .c-search__dialog {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-search-dialog);
+    display: grid;
+    place-items: start center;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    padding-block: max(12vh, var(--space-8)) var(--space-8);
+    padding-inline: var(--space-4);
+    margin: 0;
+    overflow: hidden;
+    background-color: transparent;
+    border: 0;
+    opacity: 0;
+    translate: 0 calc(var(--space-4) * -1);
+    transition:
+      opacity var(--transition-slow),
+      translate var(--transition-slow),
+      display 0.4s allow-discrete,
+      overlay 0.4s allow-discrete;
+  }
+
+  .c-search__dialog:not([open]) {
+    display: none;
+  }
+
+  .c-search__dialog[open] {
+    display: grid;
+    opacity: 1;
+    translate: 0 0;
+  }
+
+  @starting-style {
+    .c-search__dialog[open] {
+      opacity: 0;
+      translate: 0 calc(var(--space-4) * -1);
+    }
+  }
+
+  .c-search__dialog::backdrop {
+    background-color: color-mix(
+      in srgb,
+      var(--color-fg-default) 24%,
+      transparent
+    );
+    opacity: 0;
+    backdrop-filter: blur(8px);
+    transition:
+      opacity var(--transition-slow),
+      display 0.4s allow-discrete,
+      overlay 0.4s allow-discrete;
+  }
+
+  .c-search__dialog[open]::backdrop {
+    opacity: 1;
+  }
+
+  @starting-style {
+    .c-search__dialog[open]::backdrop {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .c-search__dialog {
+      translate: 0 0;
+      transition: none;
+    }
+
+    .c-search__dialog::backdrop {
+      transition: none;
+    }
+
+    @starting-style {
+      .c-search__dialog[open] {
+        translate: 0 0;
+      }
+    }
+  }
+
+  .c-search__panel {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100%;
+    max-width: 28rem;
+    max-height: min(32rem, calc(100dvh - var(--space-16)));
+    overflow: hidden;
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+  }
+
+  .c-search__field {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    column-gap: var(--space-2);
+    align-items: center;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .c-search__field-icon {
+    color: var(--color-fg-subtle);
+  }
+
+  .c-search__input {
+    width: 100%;
+    min-width: 0;
+    padding-block: var(--space-2);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-fg-default);
+    outline: none;
+    background: transparent;
+    border: 0;
+  }
+
+  .c-search__input::placeholder {
+    color: var(--color-fg-inactive);
+  }
+
+  .c-search__input::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  .c-search__close {
+    display: grid;
+    place-items: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+    color: var(--color-fg-subtle);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (any-hover: hover) {
+    .c-search__close {
+      transition: background-color var(--transition-fast);
+    }
+
+    .c-search__close:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  .c-search__list {
+    max-height: min(24rem, calc(100dvh - 12rem));
+    padding: var(--space-2);
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    list-style: none;
+  }
+
+  .c-search__item[hidden] {
+    display: none;
+  }
+
+  .c-search__link {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-3);
+    border-radius: var(--radius-sm);
+  }
+
+  @media (any-hover: hover) {
+    .c-search__link {
+      transition: background-color var(--transition-fast);
+    }
+
+    .c-search__link:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  .c-search__label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--color-fg-default);
+  }
+
+  .c-search__label-ja {
+    font-size: var(--font-size-xs);
+    color: var(--color-fg-subtle);
+  }
+
+  .c-search__empty {
+    padding-block: var(--space-8);
+    padding-inline: var(--space-4);
+    margin: 0;
+    font-size: var(--font-size-sm);
+    color: var(--color-fg-subtle);
+    text-align: center;
+  }
+
+  .c-search__empty[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  import "../../scripts/search-modal.ts";
+</script>

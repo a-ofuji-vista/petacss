@@ -1,0 +1,67 @@
+<div class="tab-basic js-tab-basic">
+  <div class="tab-basic__list" role="tablist" aria-label="タブ">
+    <button
+      class="tab-basic__tab js-tab-basic-tab tab-basic__tab--active"
+      type="button"
+      role="tab"
+      aria-selected="true"
+      data-tab="tab-1"
+    >
+      タブ1
+    </button>
+    <button
+      class="tab-basic__tab js-tab-basic-tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-tab="tab-2"
+    >
+      タブ2
+    </button>
+    <button
+      class="tab-basic__tab js-tab-basic-tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-tab="tab-3"
+    >
+      タブ3
+    </button>
+  </div>
+
+  <div class="tab-basic__panels">
+    <section
+      class="tab-basic__panel js-tab-basic-panel tab-basic__panel--active"
+      role="tabpanel"
+      data-panel="tab-1"
+    >
+      <p class="tab-basic__text">
+        タブ1のコンテンツです。ここに説明テキストが入ります。
+      </p>
+    </section>
+
+    <section
+      class="tab-basic__panel js-tab-basic-panel"
+      role="tabpanel"
+      data-panel="tab-2"
+      hidden
+    >
+      <p class="tab-basic__text">
+        タブ2のコンテンツです。ここに説明テキストが入ります。
+      </p>
+    </section>
+
+    <section
+      class="tab-basic__panel js-tab-basic-panel"
+      role="tabpanel"
+      data-panel="tab-3"
+      hidden
+    >
+      <p class="tab-basic__text">
+        タブ3のコンテンツです。ここに説明テキストが入ります。
+      </p>
+    </section>
+  </div>
+</div>

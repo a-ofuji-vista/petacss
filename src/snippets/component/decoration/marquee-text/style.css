@@ -1,0 +1,59 @@
+/* Google Fonts の Barlow（Bold）が必要です。head.html を <head> に追加してください。 */
+
+/* テキストの長さに応じて --marquee-duration を調整してください。 */
+
+/* reset */
+:where(.marquee-text) {
+  box-sizing: border-box;
+}
+
+/* snippet */
+.marquee-text {
+  --marquee-color: #2b36f5;
+  --marquee-duration: 50s;
+
+  display: flex;
+  width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+.marquee-text::before,
+.marquee-text::after {
+  flex-shrink: 0;
+  padding-block: 0.05em;
+  font-family: barlow, sans-serif;
+  font-size: 80px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--marquee-color);
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  content: attr(data-text) "\2002" attr(data-text) "\2002" attr(data-text)
+    "\2002" attr(data-text) "\2002" attr(data-text) "\2002" attr(data-text)
+    "\2002" attr(data-text) "\2002" attr(data-text) "\2002";
+  animation: marquee-text-scroll var(--marquee-duration) linear infinite;
+}
+
+@supports (-webkit-text-stroke: 1px #000) {
+  .marquee-text::before,
+  .marquee-text::after {
+    color: transparent;
+    paint-order: stroke fill;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 1px var(--marquee-color);
+  }
+}
+
+@keyframes marquee-text-scroll {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-text::before,
+  .marquee-text::after {
+    animation: none;
+  }
+}

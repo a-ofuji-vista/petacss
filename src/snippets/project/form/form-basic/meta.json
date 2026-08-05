@@ -1,0 +1,8 @@
+{
+  "title": "Form basic",
+  "order": 1,
+  "description": "テキスト・メール・セレクト・テキストエリア・チェックボックスを含むお問い合わせフォーム。",
+  "previewScroll": true,
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

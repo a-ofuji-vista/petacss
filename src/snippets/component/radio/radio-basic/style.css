@@ -1,0 +1,57 @@
+/* reset */
+:where(label).radio-basic {
+  font: inherit;
+  cursor: pointer;
+}
+
+:where(input).radio-basic__input {
+  box-sizing: border-box;
+  font: inherit;
+  appearance: none;
+}
+
+/* snippet */
+.radio-basic {
+  --radio-border: #e7e7e7;
+  --radio-text-color: #364153;
+  --radio-background: #fff;
+  --radio-accent: #2b36f5;
+  --radio-focus-color: var(--radio-accent);
+
+  display: inline-flex;
+  column-gap: 10px;
+  align-items: center;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--radio-text-color);
+}
+
+.radio-basic__input {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  background-color: var(--radio-background);
+  border: 1px solid var(--radio-border);
+  border-radius: calc(infinity * 1px);
+
+  &:checked {
+    background-color: var(--radio-accent);
+    background-image: radial-gradient(
+      circle,
+      #fff 0,
+      #fff 35%,
+      transparent 36%
+    );
+    border-color: var(--radio-accent);
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--radio-focus-color);
+    outline-offset: 2px;
+  }
+}

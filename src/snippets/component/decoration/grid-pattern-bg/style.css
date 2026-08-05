@@ -1,0 +1,51 @@
+/* --grid-background で下地の背景色を変更できます。 */
+
+/* --grid-color で格子線の色を変更できます。 */
+
+/* --grid-size で格子の間隔を変更できます。 */
+
+/* --grid-line-width で格子線の太さを変更できます。 */
+
+/* reset */
+:where(.grid-pattern-bg) {
+  box-sizing: border-box;
+}
+
+:where(p).grid-pattern-bg__text {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.grid-pattern-bg {
+  --grid-background: #e7eaee;
+  --grid-color: #eff3f9;
+  --grid-size: 24px;
+  --grid-line-width: 1px;
+
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 24px;
+  background-color: var(--grid-background);
+  background-image:
+    linear-gradient(
+      var(--grid-color) var(--grid-line-width),
+      transparent var(--grid-line-width)
+    ),
+    linear-gradient(
+      90deg,
+      var(--grid-color) var(--grid-line-width),
+      transparent var(--grid-line-width)
+    );
+  background-position: center;
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+.grid-pattern-bg__text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #334155;
+}

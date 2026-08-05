@@ -1,0 +1,6 @@
+{
+  "title": "Modal basic no title",
+  "order": 2,
+  "description": "タイトルなしの基本モーダル。長文で本文スクロールが必要な場合は modal-basic-scroll を使用。",
+  "previewPadding": false
+}

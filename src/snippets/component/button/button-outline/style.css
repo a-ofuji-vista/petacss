@@ -1,0 +1,64 @@
+/* reset */
+:where(a, button).button-outline {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-outline {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-outline {
+  --button-border: #2b36f5;
+  --button-background-hover: #2b36f5;
+  --button-color: #2b36f5;
+  --button-color-hover: #fff;
+  --button-focus-color: #2b36f5;
+
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: transparent;
+  border: 2px solid var(--button-border);
+  border-radius: calc(infinity * 1px);
+
+  @media (any-hover: hover) {
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+
+    &:hover {
+      color: var(--button-color-hover);
+      background-color: var(--button-background-hover);
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-outline {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

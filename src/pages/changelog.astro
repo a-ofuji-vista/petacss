@@ -1,0 +1,128 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PrevNext from "../components/ui/PrevNext.astro";
+import {
+  changelog,
+  formatChangelogDate,
+  getChangelogSlug,
+} from "../lib/changelog";
+
+const headings = changelog.map((entry) => ({
+  depth: 2,
+  slug: getChangelogSlug(entry.date),
+  text: formatChangelogDate(entry.date),
+}));
+---
+
+<BaseLayout
+  title="Update History"
+  description="PETA CSS の更新内容をまとめています。"
+  headings={headings}
+  showReleaseBar={false}
+>
+  <article class="p-changelog">
+    <header class="p-changelog__header">
+      <h1 class="p-changelog__title">Update History</h1>
+      <p class="p-changelog__lead">PETA CSS の更新内容をまとめています。</p>
+    </header>
+
+    <div class="p-changelog__sections">
+      {
+        changelog.map((entry) => (
+          <section class="p-changelog__section">
+            <h2 class="p-changelog__heading" id={getChangelogSlug(entry.date)}>
+              <time datetime={entry.date}>
+                {formatChangelogDate(entry.date)}
+              </time>
+            </h2>
+
+            {entry.added && entry.added.length > 0 && (
+              <div class="p-changelog__group">
+                <h3 class="p-changelog__subheading">追加</h3>
+                <ul class="p-changelog__list">
+                  {entry.added.map((item) => (
+                    <li class="p-changelog__item">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {entry.changed && entry.changed.length > 0 && (
+              <div class="p-changelog__group">
+                <h3 class="p-changelog__subheading">変更</h3>
+                <ul class="p-changelog__list">
+                  {entry.changed.map((item) => (
+                    <li class="p-changelog__item">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        ))
+      }
+    </div>
+  </article>
+  <PrevNext
+    prev={{ href: "/", label: "What is PETA CSS?" }}
+    next={{ href: "/snippets", label: "All snippets" }}
+  />
+</BaseLayout>
+
+<style>
+  .p-changelog__header {
+    margin-inline: var(--space-6);
+  }
+
+  .p-changelog__title {
+    font-size: var(--font-size-3xl);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .p-changelog__lead {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-fg-subtle);
+  }
+
+  .p-changelog__sections {
+    display: grid;
+    row-gap: var(--space-1);
+    margin-top: var(--space-8);
+  }
+
+  .p-changelog__section {
+    display: grid;
+    row-gap: var(--space-4);
+    padding: var(--space-9) var(--space-6);
+    background-color: var(--color-bg-default);
+    border-radius: var(--radius-xl);
+  }
+
+  .p-changelog__heading {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .p-changelog__group {
+    display: grid;
+    row-gap: var(--space-2);
+  }
+
+  .p-changelog__subheading {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-fg-subtle);
+  }
+
+  .p-changelog__list {
+    display: grid;
+    row-gap: var(--space-2);
+    padding-left: var(--space-6);
+  }
+
+  .p-changelog__item {
+    font-size: var(--font-size-sm);
+    list-style: disc outside;
+  }
+</style>

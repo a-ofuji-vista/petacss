@@ -1,0 +1,28 @@
+/* reset */
+:where(h2).heading-line-left {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-line-left {
+  --heading-color: #364153;
+  --heading-line-color: #e7e7e7;
+  --heading-line-width: 2rem;
+
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+
+  &::before {
+    flex-shrink: 0;
+    width: var(--heading-line-width);
+    height: 1px;
+    content: "";
+    background-color: var(--heading-line-color);
+  }
+}

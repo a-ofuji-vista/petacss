@@ -1,0 +1,6 @@
+{
+  "title": "Input error",
+  "order": 2,
+  "description": "エラーメッセージ付きのテキスト入力フィールド。",
+  "previewBackground": "#fff"
+}

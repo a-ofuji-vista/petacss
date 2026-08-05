@@ -1,0 +1,220 @@
+---
+import hljs from "highlight.js/lib/core";
+import xml from "highlight.js/lib/languages/xml";
+import css from "highlight.js/lib/languages/css";
+import javascript from "highlight.js/lib/languages/javascript";
+
+hljs.registerLanguage("html", xml);
+hljs.registerLanguage("xml", xml);
+hljs.registerLanguage("css", css);
+hljs.registerLanguage("javascript", javascript);
+
+interface Props {
+  code: string;
+  language: "html" | "css" | "javascript";
+}
+
+const { code, language } = Astro.props;
+const highlighted = hljs.highlight(code, { language }).value;
+---
+
+<div class="c-code-block js-code-block">
+  <template class="js-code-source">{code}</template>
+  <pre
+    class="c-code-block__pre"><code class={`hljs language-${language}`} set:html={highlighted} /></pre>
+  <button
+    type="button"
+    class="c-code-block__copy js-copy-button"
+    aria-label="コードをコピー"
+    data-tooltip="コピー"
+    data-language={language}
+  >
+    <svg
+      class="c-code-block__icon c-code-block__icon--copy"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      aria-hidden="true"
+    >
+      <rect
+        x="8"
+        y="8"
+        width="13"
+        height="13"
+        rx="2"
+        ry="2"
+        stroke="currentColor"
+        stroke-width="1.8"></rect>
+      <path
+        d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"></path>
+    </svg>
+    <svg
+      class="c-code-block__icon c-code-block__icon--check"
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      aria-hidden="true"
+    >
+      <path
+        fill="currentColor"
+        d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"></path>
+    </svg>
+  </button>
+</div>
+
+<style>
+  .c-code-block {
+    position: relative;
+    height: 100%;
+  }
+
+  .c-code-block__pre {
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+    scrollbar-color: var(--color-code-scrollbar-thumb)
+      var(--color-code-scrollbar-track);
+    scrollbar-width: thin;
+    background-color: var(--color-code-bg);
+  }
+
+  .c-code-block__pre::-webkit-scrollbar:vertical {
+    width: var(--scrollbar-code-size);
+  }
+
+  .c-code-block__pre::-webkit-scrollbar:horizontal {
+    height: var(--scrollbar-code-size);
+  }
+
+  .c-code-block__pre::-webkit-scrollbar-track {
+    background-color: var(--color-code-scrollbar-track);
+  }
+
+  .c-code-block__pre::-webkit-scrollbar-thumb {
+    background-color: var(--color-code-scrollbar-thumb);
+    border-radius: var(--radius-sm);
+  }
+
+  .c-code-block__pre::-webkit-scrollbar-corner {
+    background-color: var(--color-code-scrollbar-track);
+  }
+
+  @media (any-hover: hover) {
+    .c-code-block__pre::-webkit-scrollbar-thumb:hover {
+      background-color: var(--color-code-scrollbar-thumb-hover);
+    }
+  }
+
+  .c-code-block__pre code {
+    display: block;
+    width: max-content;
+    min-width: 100%;
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .c-code-block__copy {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+    padding: 0;
+    color: #fff;
+    cursor: pointer;
+    background-color: color-mix(in srgb, #fff 8%, transparent);
+    border: 0;
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+
+  .c-code-block__copy::after {
+    position: absolute;
+    top: calc(100% + var(--space-1));
+    left: 50%;
+    z-index: 1;
+    visibility: hidden;
+    padding-block: var(--space-1);
+    padding-inline: var(--space-2);
+    font-size: var(--font-size-xs);
+    line-height: 1;
+    color: var(--color-fg-default);
+    white-space: nowrap;
+    pointer-events: none;
+    content: attr(data-tooltip);
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-sm);
+    opacity: 0;
+    transform: translateX(-50%);
+    transition:
+      opacity var(--transition-fast),
+      visibility var(--transition-fast);
+  }
+
+  .c-code-block__copy:focus-visible::after {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .c-code-block:focus-within .c-code-block__copy {
+    opacity: 1;
+  }
+
+  @media (any-hover: hover) {
+    .c-code-block:hover .c-code-block__copy {
+      opacity: 1;
+    }
+
+    .c-code-block__copy {
+      transition:
+        opacity var(--transition-fast),
+        background-color var(--transition-fast);
+    }
+
+    .c-code-block__copy:hover {
+      background-color: color-mix(in srgb, #fff 16%, transparent);
+    }
+
+    .c-code-block__copy:hover::after {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  @media (any-hover: none) {
+    .c-code-block__copy {
+      opacity: 1;
+    }
+  }
+
+  .c-code-block__icon--check {
+    display: none;
+  }
+
+  .c-code-block__copy--copied,
+  .c-code-block__copy--copied:hover {
+    background-color: var(--color-accent);
+  }
+
+  .c-code-block__copy--copied .c-code-block__icon--copy {
+    display: none;
+  }
+
+  .c-code-block__copy--copied .c-code-block__icon--check {
+    display: block;
+  }
+</style>
+
+<script>
+  import "../../scripts/copy-code.ts";
+</script>

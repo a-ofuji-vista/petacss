@@ -1,0 +1,7 @@
+{
+  "title": "Accordion basic plus minus",
+  "order": 2,
+  "description": "details/summary + JS によるアコーディオン。閉じているときは＋、開いているときは−のアイコン。",
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

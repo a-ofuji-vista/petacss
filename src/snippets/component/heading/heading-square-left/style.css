@@ -1,0 +1,27 @@
+/* reset */
+:where(h2).heading-square-left {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-square-left {
+  --heading-accent: #2b36f5;
+  --heading-color: #364153;
+
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+
+  &::before {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    content: "";
+    background-color: var(--heading-accent);
+  }
+}

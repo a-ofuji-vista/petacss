@@ -1,0 +1,6 @@
+{
+  "title": "Select error",
+  "order": 2,
+  "description": "エラーメッセージ付きのセレクトボックス。JS によるカスタム UI。",
+  "previewBackground": "#fff"
+}

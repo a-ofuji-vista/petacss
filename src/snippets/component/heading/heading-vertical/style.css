@@ -1,0 +1,32 @@
+/* reset */
+:where(h2).heading-vertical {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-vertical {
+  --heading-accent: #2b36f5;
+  --heading-color: #364153;
+
+  display: inline-flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  font-weight: 700;
+  writing-mode: vertical-rl;
+}
+
+.heading-vertical__text {
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--heading-color);
+  letter-spacing: 0.1em;
+}
+
+.heading-vertical__en {
+  font-size: 11px;
+  line-height: 1;
+  color: var(--heading-accent);
+  letter-spacing: 0.15em;
+}

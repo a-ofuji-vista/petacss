@@ -1,0 +1,75 @@
+/* 背景用の動画ファイルを別途用意してください。 */
+
+/* ノイズテクスチャ画像を別途用意してください。 */
+
+/* --video-fallback で動画読み込み前・reduced-motion 時の下地色を変更できます。 */
+
+/* --noise-opacity でテクスチャの濃さを調整できます。 */
+
+/* reset */
+:where(.video-bg) {
+  box-sizing: border-box;
+}
+
+:where(p).video-bg__text {
+  margin: 0;
+  font: inherit;
+}
+
+:where(video).video-bg__video {
+  margin: 0;
+  border: 0;
+}
+
+/* snippet */
+.video-bg {
+  --video-fallback: #0f172a;
+  --noise-image: url("/snippets/bg_noise.png");
+  --noise-opacity: 0.3;
+
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 24px;
+  overflow: hidden;
+  background-color: var(--video-fallback);
+  isolation: isolate;
+}
+
+.video-bg__video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  object-fit: cover;
+}
+
+.video-bg::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  content: "";
+  background-image: var(--noise-image);
+  background-repeat: repeat;
+  opacity: var(--noise-opacity);
+}
+
+.video-bg__text {
+  position: relative;
+  z-index: 2;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #334155;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-bg__video {
+    display: none;
+  }
+}

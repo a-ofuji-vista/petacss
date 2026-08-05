@@ -1,0 +1,8 @@
+{
+  "title": "Tab index",
+  "order": 3,
+  "description": "インデックス風タブ切り替え。アクティブタブがコンテンツ領域と一体化する。キーボード操作（←→ / Home / End）対応。",
+  "previewPadding": false,
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

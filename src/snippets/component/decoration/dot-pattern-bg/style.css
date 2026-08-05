@@ -1,0 +1,46 @@
+/* --dot-background で下地の背景色を変更できます。 */
+
+/* --dot-color でドットの色を変更できます。 */
+
+/* --dot-size でドットの直径を変更できます。 */
+
+/* --dot-spacing でドットの間隔を変更できます。 */
+
+/* reset */
+:where(.dot-pattern-bg) {
+  box-sizing: border-box;
+}
+
+:where(p).dot-pattern-bg__text {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.dot-pattern-bg {
+  --dot-background: #f8fafc;
+  --dot-color: #cbd5e1;
+  --dot-size: 2px;
+  --dot-spacing: 24px;
+
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: 100dvh;
+  padding: 24px;
+  background-color: var(--dot-background);
+  background-image: radial-gradient(
+    circle,
+    var(--dot-color) calc(var(--dot-size) / 2),
+    transparent calc(var(--dot-size) / 2)
+  );
+  background-position: center;
+  background-size: var(--dot-spacing) var(--dot-spacing);
+}
+
+.dot-pattern-bg__text {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #334155;
+}

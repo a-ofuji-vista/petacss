@@ -1,0 +1,89 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page Not Found"
+  description="お探しのページは見つかりませんでした。"
+  showReleaseBar={false}
+>
+  <article class="p-not-found">
+    <p class="p-not-found__code" aria-hidden="true">404</p>
+    <header class="p-not-found__header">
+      <h1 class="p-not-found__title">Page Not Found</h1>
+      <p class="p-not-found__lead">
+        お探しのページは見つかりませんでした。<br />
+        URLが間違っているか、ページが移動または削除された可能性があります。
+      </p>
+    </header>
+
+    <div class="p-not-found__actions">
+      <a class="p-not-found__link" href="/">トップページへ戻る</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .p-not-found {
+    display: grid;
+    row-gap: var(--space-8);
+    justify-items: center;
+    padding-block: var(--space-10);
+    text-align: center;
+  }
+
+  .p-not-found__code {
+    font-size: clamp(var(--font-size-3xl), 12vw, 7.5rem);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+    line-height: 1;
+    color: var(--color-fg-subtle);
+    opacity: 0.4;
+  }
+
+  .p-not-found__header {
+    display: grid;
+    row-gap: var(--space-4);
+    max-width: 36rem;
+    margin-inline: var(--space-6);
+  }
+
+  .p-not-found__title {
+    font-size: var(--font-size-3xl);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .p-not-found__lead {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-fg-subtle);
+  }
+
+  .p-not-found__actions {
+    width: min(100%, 20rem);
+    margin-inline: var(--space-6);
+  }
+
+  .p-not-found__link {
+    display: block;
+    padding: var(--space-4) var(--space-6);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-fg-default);
+    text-align: center;
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-full);
+  }
+
+  @media (any-hover: hover) {
+    .p-not-found__link {
+      transition: background-color var(--transition-fast);
+    }
+
+    .p-not-found__link:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+</style>

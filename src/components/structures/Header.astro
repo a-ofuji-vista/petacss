@@ -1,0 +1,101 @@
+---
+import SearchModal from "../ui/SearchModal.astro";
+import ThemeToggle from "../ui/ThemeToggle.astro";
+---
+
+<header class="l-header">
+  <div class="l-header__inner">
+    <div class="l-header__logo">
+      <a class="l-header__logo-link" href="/" aria-label="PETA CSS トップ">
+        <img
+          class="l-header__logo-image"
+          src="/brand/logo.svg"
+          alt="PETA CSS"
+          width="89"
+          height="24"
+        />
+      </a>
+    </div>
+
+    <div class="l-header__actions">
+      <SearchModal />
+      <ThemeToggle />
+
+      <button
+        class="l-header__menu js-global-nav-open"
+        type="button"
+        aria-haspopup="dialog"
+        aria-controls="l-global-nav-dialog"
+        aria-label="メニューを開く"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M5 7h12M5 11h12M5 15h12"
+            stroke="currentColor"
+            stroke-width="1.8"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<style>
+  .l-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-header);
+    background-color: var(--color-bg-header);
+    backdrop-filter: blur(var(--blur-header));
+  }
+
+  .l-header__inner {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    column-gap: var(--space-4);
+    align-items: center;
+    max-width: var(--layout-max-width);
+    height: var(--layout-header-height);
+    padding-block: var(--space-1);
+    padding-inline: var(--space-6);
+    margin-inline: auto;
+  }
+
+  .l-header__actions {
+    display: grid;
+    grid-auto-flow: column;
+    column-gap: var(--space-1);
+    align-items: center;
+  }
+
+  .l-header__menu {
+    display: grid;
+    place-items: center;
+    width: var(--size-touch-target);
+    height: var(--size-touch-target);
+    color: var(--color-fg-default);
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (any-hover: hover) {
+    .l-header__menu {
+      transition: background-color var(--transition-fast);
+    }
+
+    .l-header__menu:hover {
+      background-color: var(--color-bg-surface);
+    }
+  }
+
+  @media (width > 960px) {
+    .l-header__menu {
+      display: none;
+    }
+  }
+</style>

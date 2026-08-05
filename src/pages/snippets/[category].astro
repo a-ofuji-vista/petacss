@@ -1,0 +1,70 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeading from "../../components/ui/PageHeading.astro";
+import SnippetCard from "../../components/ui/SnippetCard.astro";
+import PrevNext from "../../components/ui/PrevNext.astro";
+import { getAllSnippets, getCategoryTree } from "../../lib/snippets";
+
+export function getStaticPaths() {
+  const tree = getCategoryTree();
+  const allSubs = tree.flatMap((t) => t.subCategories);
+
+  return allSubs.map((sub) => {
+    const items = getAllSnippets().filter(
+      (s) => s.subCategorySlug.toLowerCase() === sub.slug.toLowerCase(),
+    );
+    const idx = allSubs.findIndex(
+      (s) => s.slug.toLowerCase() === sub.slug.toLowerCase(),
+    );
+    const prevSub = allSubs[idx - 1];
+    const nextSub = allSubs[idx + 1];
+
+    return {
+      params: { category: sub.slug },
+      props: {
+        sub: sub.label,
+        items,
+        prev: prevSub
+          ? {
+              href: `/snippets/${prevSub.slug}`,
+              label: prevSub.label,
+            }
+          : { href: "/snippets", label: "All snippets" },
+        next: nextSub
+          ? {
+              href: `/snippets/${nextSub.slug}`,
+              label: nextSub.label,
+            }
+          : undefined,
+      },
+    };
+  });
+}
+
+const { sub, items, prev, next } = Astro.props;
+
+const headings = items.map((s) => ({
+  depth: 2,
+  slug: s.slug,
+  text: s.meta.title,
+}));
+---
+
+<BaseLayout
+  title={sub}
+  description={`${sub} カテゴリの UI スニペット一覧。HTML / CSS をコピーしてすぐ使えます。`}
+  headings={headings}
+>
+  <PageHeading title={sub} count={items.length} />
+  <div class="p-snippet-stack">
+    {items.map((item) => <SnippetCard snippet={item} />)}
+  </div>
+  <PrevNext prev={prev} next={next} />
+</BaseLayout>
+
+<style>
+  .p-snippet-stack {
+    display: grid;
+    row-gap: var(--space-1);
+  }
+</style>

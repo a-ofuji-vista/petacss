@@ -1,0 +1,52 @@
+<div class="modal-basic js-modal-basic">
+  <button class="modal-basic__open js-modal-basic-open" type="button">
+    モーダルを開く
+  </button>
+
+  <dialog
+    class="modal-basic__dialog js-modal-basic-dialog"
+    aria-label="モーダルタイトル"
+  >
+    <div class="modal-basic__header">
+      <h3 class="modal-basic__title">モーダルタイトル</h3>
+      <button
+        class="modal-basic__close js-modal-basic-close"
+        type="button"
+        aria-label="モーダルを閉じる"
+      >
+        <svg
+          width="22"
+          height="22"
+          viewBox="0 0 22 22"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M5 5l12 12M17 5L5 17"
+            stroke="currentColor"
+            stroke-width="1.8"
+          />
+        </svg>
+      </button>
+    </div>
+
+    <p class="modal-basic__text">
+      ここに説明テキストが入ります。ここに説明テキストが入ります。ここに説明テキストが入ります。
+    </p>
+
+    <div class="modal-basic__footer">
+      <button
+        class="modal-basic__button modal-basic__button--secondary js-modal-basic-close"
+        type="button"
+      >
+        キャンセル
+      </button>
+      <button
+        class="modal-basic__button modal-basic__button--primary js-modal-basic-close"
+        type="button"
+      >
+        OK
+      </button>
+    </div>
+  </dialog>
+</div>

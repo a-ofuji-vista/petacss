@@ -1,0 +1,193 @@
+/* reset */
+:where(h2).faq-accordion__heading,
+:where(p).faq-accordion__answer-text {
+  margin: 0;
+  font: inherit;
+}
+
+:where(summary).faq-accordion__question {
+  font: inherit;
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* snippet */
+.faq-accordion {
+  --faq-background: #fff;
+  --faq-border: #e7e7e7;
+  --faq-heading-color: #1e2939;
+  --faq-question-color: #364153;
+  --faq-answer-color: #5e6775;
+  --faq-icon-color: #6a7282;
+  --faq-accent: #2b36f5;
+  --faq-mark-question-color: #fff;
+  --faq-mark-question-background: var(--faq-accent);
+  --faq-mark-answer-color: var(--faq-accent);
+  --faq-mark-answer-background: color-mix(
+    in srgb,
+    var(--faq-accent) 12%,
+    transparent
+  );
+  --faq-interactive-background: #f7f8fa;
+  --faq-focus-color: var(--faq-accent);
+  --faq-duration: 0.3s;
+
+  width: 100%;
+  max-width: 640px;
+}
+
+.faq-accordion__heading {
+  margin-bottom: 16px;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--faq-heading-color);
+  text-align: center;
+}
+
+.faq-accordion__list {
+  display: grid;
+  row-gap: 12px;
+}
+
+.faq-accordion__item {
+  overflow: hidden;
+  background-color: var(--faq-background);
+  border: 1px solid var(--faq-border);
+  border-radius: 12px;
+}
+
+.faq-accordion__question {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  column-gap: 16px;
+  align-items: center;
+  padding: 18px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--faq-question-color);
+  border-radius: 12px;
+
+  @media (any-hover: hover) {
+    transition: background-color var(--faq-duration);
+
+    &:hover {
+      background-color: var(--faq-interactive-background);
+    }
+  }
+}
+
+.faq-accordion__mark {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  border-radius: 50%;
+}
+
+.faq-accordion__mark--question {
+  color: var(--faq-mark-question-color);
+  background-color: var(--faq-mark-question-background);
+}
+
+.faq-accordion__mark--answer {
+  color: var(--faq-mark-answer-color);
+  background-color: var(--faq-mark-answer-background);
+}
+
+.faq-accordion__icon {
+  display: grid;
+  place-items: center;
+  color: var(--faq-icon-color);
+  transition: color var(--faq-duration);
+}
+
+.faq-accordion__icon-bar {
+  transform-origin: center;
+  transform-box: fill-box;
+  transition: transform var(--faq-duration);
+}
+
+:is(
+  .faq-accordion:not(.faq-accordion--enhanced) .faq-accordion__item[open],
+  .faq-accordion--enhanced .faq-accordion__item--expanded
+) {
+  & .faq-accordion__question {
+    background-color: var(--faq-interactive-background);
+    border-radius: 12px 12px 0 0;
+  }
+
+  & .faq-accordion__icon {
+    color: var(--faq-accent);
+  }
+
+  & .faq-accordion__icon-bar {
+    transform: rotate(90deg);
+  }
+}
+
+.faq-accordion__answer {
+  display: flex;
+  column-gap: 16px;
+  align-items: flex-start;
+  padding: 10px 20px 20px;
+}
+
+.faq-accordion__answer-text {
+  flex: 1;
+  padding-top: 1px;
+  font-size: 14px;
+  line-height: 1.75;
+  color: var(--faq-answer-color);
+}
+
+/* open / close animation(JS 実行時) */
+.faq-accordion--enhanced .faq-accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+}
+
+.faq-accordion--enhanced .faq-accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.faq-accordion--enhanced .faq-accordion__item--expanded .faq-accordion__panel {
+  grid-template-rows: 1fr;
+}
+
+.faq-accordion--enhanced .faq-accordion__item--animating .faq-accordion__panel {
+  transition: grid-template-rows var(--faq-duration) ease;
+}
+
+/* focus */
+.faq-accordion .faq-accordion__question {
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--faq-focus-color);
+    outline-offset: -2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .faq-accordion__icon,
+  .faq-accordion__icon-bar,
+  .faq-accordion--enhanced
+    .faq-accordion__item--animating
+    .faq-accordion__panel {
+    transition: none;
+  }
+}

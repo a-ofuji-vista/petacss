@@ -1,0 +1,115 @@
+/* reset */
+:where(a).card-image-text-link {
+  box-sizing: border-box;
+  text-decoration: none;
+}
+
+:where(img).card-image-text-link__image {
+  display: block;
+}
+
+:where(h3).card-image-text-link__title,
+:where(p).card-image-text-link__text {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.card-image-text-link {
+  --card-background: #fff;
+  --card-border: #e7e7e7;
+  --card-title-color: #364153;
+  --card-text-color: #5e6775;
+  --card-link-color: #2b36f5;
+  --card-link-color-hover: #1f28a8;
+  --card-focus-color: #2b36f5;
+
+  display: grid;
+  width: 100%;
+  max-width: 320px;
+  overflow: hidden;
+  background-color: var(--card-background);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--card-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+.card-image-text-link__media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+}
+
+.card-image-text-link__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+
+  @media (any-hover: hover) {
+    transition: transform 0.3s;
+
+    .card-image-text-link:hover & {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.card-image-text-link__body {
+  padding: 24px;
+}
+
+.card-image-text-link__title {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--card-title-color);
+}
+
+.card-image-text-link__text {
+  margin-top: 12px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--card-text-color);
+}
+
+.card-image-text-link__label {
+  display: block;
+  margin-top: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--card-link-color);
+  text-align: right;
+
+  @media (any-hover: hover) {
+    transition: color 0.3s;
+
+    .card-image-text-link:hover & {
+      color: var(--card-link-color-hover);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card-image-text-link__image {
+    @media (any-hover: hover) {
+      transition: none;
+
+      .card-image-text-link:hover & {
+        transform: none;
+      }
+    }
+  }
+
+  .card-image-text-link__label {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

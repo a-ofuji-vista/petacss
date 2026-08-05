@@ -1,0 +1,6 @@
+{
+  "title": "Breadcrumb basic dot",
+  "order": 3,
+  "description": "パンくずリスト。区切りに中黒（・）を使用。",
+  "previewBackground": "#fff"
+}

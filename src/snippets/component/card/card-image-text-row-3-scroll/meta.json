@@ -1,0 +1,5 @@
+{
+  "title": "Card image text row 3 scroll",
+  "order": 8,
+  "description": "基本カードを3列で並べたレイアウト。480px未満は横スクロール（マウスドラッグ・キーボード操作対応）。"
+}

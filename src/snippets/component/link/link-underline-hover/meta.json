@@ -1,0 +1,8 @@
+{
+  "title": "Link underline hover",
+  "order": 1,
+  "description": "ホバー時に左から右へ下線が引かれ、ホバーを外すと左へ消えるテキストリンク。複数行にも対応。",
+  "previewDirection": "column",
+  "previewGap": "var(--space-4)",
+  "previewBackground": "#fff"
+}

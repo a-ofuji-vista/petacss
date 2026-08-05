@@ -1,0 +1,6 @@
+{
+  "title": "Video bg",
+  "order": 6,
+  "description": "動画を全体に敷き詰めた背景装飾。背景用の動画ファイル（WebM / MP4）を別途用意してください。",
+  "previewPadding": false
+}

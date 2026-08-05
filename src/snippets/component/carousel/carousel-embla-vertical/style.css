@@ -1,0 +1,60 @@
+/* Embla Carousel と Auto Scroll プラグインを CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* 初期化 JS（script.js）は CDN 読み込みより後に配置してください。 */
+
+/* --carousel-viewport-height で表示領域の高さを変更できます。 */
+
+/* --carousel-slide-size でスライド高さを変更できます。 */
+
+/* --carousel-gap でスライド間隔を変更できます。 */
+
+/* --carousel-radius で角丸を変更できます。 */
+
+/* --carousel-scroll-speed で流れる速さ（px / frame）を変更できます。 */
+
+/* reset */
+:where(.carousel-embla-vertical) {
+  box-sizing: border-box;
+}
+
+:where(img).carousel-embla-vertical__image {
+  display: block;
+}
+
+/* snippet */
+.carousel-embla-vertical {
+  --carousel-viewport-height: 360px;
+  --carousel-slide-size: 72%;
+  --carousel-gap: 16px;
+  --carousel-radius: 16px;
+  --carousel-scroll-speed: 0.5;
+
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.carousel-embla-vertical__viewport {
+  height: var(--carousel-viewport-height);
+  overflow: hidden;
+}
+
+.carousel-embla-vertical__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: calc(var(--carousel-gap) * -1);
+}
+
+.carousel-embla-vertical__slide {
+  flex: 0 0 var(--carousel-slide-size);
+  min-height: 0;
+  padding-top: var(--carousel-gap);
+}
+
+.carousel-embla-vertical__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--carousel-radius);
+}

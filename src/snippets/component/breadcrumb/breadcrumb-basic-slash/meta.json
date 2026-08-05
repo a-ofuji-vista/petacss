@@ -1,0 +1,6 @@
+{
+  "title": "Breadcrumb basic slash",
+  "order": 2,
+  "description": "パンくずリスト。区切りにスラッシュ（/）を使用。",
+  "previewBackground": "#fff"
+}

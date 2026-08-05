@@ -1,0 +1,237 @@
+/* reset */
+:where(a).header-basic__logo {
+  text-decoration: none;
+}
+
+:where(img).header-basic__logo-image {
+  display: block;
+}
+
+:where(ul).header-basic__list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:where(button).header-basic__toggle {
+  box-sizing: border-box;
+  padding: 0;
+  font: inherit;
+  appearance: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+
+:where(a).header-basic__link {
+  text-decoration: none;
+}
+
+/* snippet */
+.header-basic {
+  --header-background: #fff;
+  --header-border: #e7e7e7;
+  --header-link-color: #364153;
+  --header-link-color-hover: #2b36f5;
+  --header-toggle-color: #364153;
+  --header-interactive-background: #f5f5f5;
+  --header-focus-color: var(--header-link-color-hover);
+
+  width: 100%;
+  background-color: var(--header-background);
+  border-bottom: 1px solid var(--header-border);
+}
+
+.header-basic__inner {
+  display: grid;
+  grid-template-areas:
+    "logo toggle"
+    "nav nav";
+  column-gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1280px;
+  padding: 12px 24px;
+  margin-inline: auto;
+
+  @media (width >= 768px) {
+    grid-template-areas: "logo nav";
+  }
+}
+
+.header-basic__logo {
+  grid-area: logo;
+}
+
+.header-basic__logo-image {
+  width: 89px;
+  height: 24px;
+}
+
+.header-basic__toggle {
+  display: flex;
+  flex-direction: column;
+  grid-area: toggle;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--header-toggle-color);
+  border-radius: 8px;
+  transition: background-color 0.3s;
+
+  @media (width >= 768px) {
+    display: none;
+  }
+
+  @media (any-hover: hover) {
+    &:hover {
+      background-color: var(--header-interactive-background);
+    }
+  }
+}
+
+.header-basic__toggle-line {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background-color: currentcolor;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.header-basic__nav {
+  display: grid;
+  grid-area: nav;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+
+  @media (width >= 768px) {
+    grid-template-rows: 1fr;
+    justify-self: end;
+    overflow: visible;
+  }
+}
+
+.header-basic__nav-inner {
+  min-height: 0;
+  overflow: hidden;
+
+  @media (width >= 768px) {
+    overflow: visible;
+  }
+}
+
+.header-basic__list {
+  display: grid;
+  row-gap: 4px;
+  padding-block: 8px 4px;
+
+  @media (width >= 768px) {
+    display: flex;
+    column-gap: 8px;
+    padding-block: 0;
+  }
+}
+
+.header-basic__link {
+  display: block;
+  padding: 12px 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--header-link-color);
+  border-radius: 8px;
+  transition:
+    color 0.3s,
+    background-color 0.3s;
+
+  @media (width >= 768px) {
+    padding: 8px 12px;
+  }
+
+  @media (any-hover: hover) {
+    &:hover {
+      color: var(--header-link-color-hover);
+      background-color: var(--header-interactive-background);
+    }
+  }
+}
+
+/* modifier: open */
+.header-basic--open .header-basic__nav {
+  grid-template-rows: 1fr;
+}
+
+.header-basic--open:not(.header-basic--animating) .header-basic__nav,
+.header-basic--open:not(.header-basic--animating) .header-basic__nav-inner {
+  overflow: visible;
+}
+
+.header-basic--open .header-basic__toggle-line:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.header-basic--open .header-basic__toggle-line:nth-child(2) {
+  opacity: 0;
+}
+
+.header-basic--open .header-basic__toggle-line:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* JS 未実行時(無効・読み込み失敗): 折りたたみは機能しないため常時表示 */
+.header-basic:not(.header-basic--enhanced) .header-basic__nav {
+  grid-template-rows: 1fr;
+}
+
+.header-basic:not(.header-basic--enhanced) .header-basic__nav,
+.header-basic:not(.header-basic--enhanced) .header-basic__nav-inner {
+  overflow: visible;
+}
+
+.header-basic:not(.header-basic--enhanced) .header-basic__toggle {
+  display: none;
+}
+
+.header-basic--enhanced.header-basic--animating .header-basic__nav {
+  transition: grid-template-rows 0.3s ease;
+
+  @media (width >= 768px) {
+    transition: none;
+  }
+}
+
+/* focus */
+.header-basic__logo,
+.header-basic__toggle,
+.header-basic__link {
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--header-focus-color);
+    outline-offset: 0;
+  }
+}
+
+.header-basic__toggle:focus-visible {
+  background-color: var(--header-interactive-background);
+}
+
+.header-basic__link:focus-visible {
+  color: var(--header-link-color-hover);
+  background-color: var(--header-interactive-background);
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .header-basic__toggle,
+  .header-basic__toggle-line,
+  .header-basic__link,
+  .header-basic--enhanced.header-basic--animating .header-basic__nav {
+    transition: none;
+  }
+}

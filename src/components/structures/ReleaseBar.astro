@@ -1,0 +1,120 @@
+---
+import { release } from "../../lib/release";
+import { changelog, formatChangelogDate } from "../../lib/changelog";
+
+const latestDate = changelog[0]?.date;
+---
+
+{
+  release.enabled && latestDate && (
+    <aside class="l-release-bar" aria-label="リリース情報">
+      <p class="l-release-bar__text">
+        <span class="l-release-bar__meta">
+          <time class="l-release-bar__date" datetime={latestDate}>
+            {release.emoji && (
+              <span class="l-release-bar__emoji" aria-hidden="true">
+                {release.emoji}
+              </span>
+            )}
+            {formatChangelogDate(latestDate)}
+          </time>
+          {release.message}
+        </span>
+        <a class="l-release-bar__link" href="/changelog">
+          更新履歴を見る
+          <svg
+            class="l-release-bar__icon"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.8" />
+          </svg>
+        </a>
+      </p>
+    </aside>
+  )
+}
+
+<style>
+  .l-release-bar {
+    --inset-block: var(--space-3);
+
+    position: relative;
+    padding-top: var(--inset-block);
+    margin-bottom: var(--inset-block);
+    background-color: var(--color-bg-accent);
+  }
+
+  .l-release-bar::after {
+    --wave-shape: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='50' viewBox='0 0 60 50'%3E%3Cpath d='M60 0V50C57.0831 50 55.7163 49.3218 54.0264 48.5811C52.4844 47.6693 51.1557 47.2666 49.4727 47.2666C47.7899 47.2667 46.9717 47.6694 45.6719 48.5811C44.3539 49.3218 42.7122 49.9999 39.4814 50C36.2544 50 34.6139 49.3218 33.2979 48.5811C31.999 47.6695 31.1799 47.2666 29.499 47.2666C27.8162 47.2666 26.999 47.6695 25.6992 48.5811C24.3802 49.3218 22.7407 50 19.5127 50C16.2819 50 14.6402 49.3218 13.3223 48.5811C12.0224 47.6694 11.2041 47.2667 9.52148 47.2666C7.83751 47.2666 7.01774 47.6694 5.71777 48.5811C4.39977 49.3218 2.759 50 0 50V0H60Z' fill='%23000'/%3E%3C/svg%3E");
+
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    height: var(--inset-block);
+    pointer-events: none;
+    content: "";
+    background-color: var(--color-bg-accent);
+    mask-image: var(--wave-shape);
+    mask-repeat: repeat-x;
+    mask-position: bottom left;
+    mask-size: 60px 50px;
+  }
+
+  .l-release-bar__text {
+    display: grid;
+    row-gap: var(--space-1);
+    place-items: center;
+    max-width: var(--layout-max-width);
+    padding-block: var(--space-2);
+    padding-inline: var(--space-6);
+    margin-inline: auto;
+    font-size: var(--font-size-sm);
+  }
+
+  @media (width > 960px) {
+    .l-release-bar__text {
+      grid-auto-flow: column;
+      column-gap: var(--space-2);
+      justify-content: center;
+    }
+  }
+
+  .l-release-bar__meta {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-2);
+    align-items: center;
+    justify-content: center;
+  }
+
+  .l-release-bar__date {
+    display: inline-flex;
+    gap: var(--space-1);
+    align-items: center;
+    color: var(--color-fg-subtle);
+    white-space: nowrap;
+  }
+
+  .l-release-bar__link {
+    display: inline-grid;
+    grid-auto-flow: column;
+    align-items: center;
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+  }
+
+  @media (any-hover: hover) {
+    .l-release-bar__link {
+      transition: text-decoration-color var(--transition-fast);
+    }
+
+    .l-release-bar__link:hover {
+      text-decoration-color: transparent;
+    }
+  }
+</style>

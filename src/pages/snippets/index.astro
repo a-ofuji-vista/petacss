@@ -1,0 +1,98 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeading from "../../components/ui/PageHeading.astro";
+import PrevNext from "../../components/ui/PrevNext.astro";
+import SnippetCategoryCard from "../../components/ui/SnippetCategoryCard.astro";
+import {
+  getAllSnippets,
+  getCategoryTree,
+  getSubCategoryCounts,
+} from "../../lib/snippets";
+
+const subCategoryCounts = getSubCategoryCounts();
+const groups = getCategoryTree().map((t) => ({
+  category: t.category,
+  items: t.subCategories.map((sub) => ({
+    name: sub.label,
+    href: `/snippets/${sub.slug}`,
+    count: subCategoryCounts.get(sub.slug) ?? 0,
+  })),
+}));
+const totalCount = getAllSnippets().length;
+const firstSub = groups[0]?.items[0];
+const headings = groups.map((group) => ({
+  depth: 2,
+  slug: group.category.toLowerCase(),
+  text: group.category,
+}));
+---
+
+<BaseLayout
+  title="All snippets"
+  description="公開中のスニペットをカテゴリ別にまとめています。"
+  headings={headings}
+>
+  <PageHeading
+    title="All snippets"
+    count={totalCount}
+    lead="公開中のスニペットをカテゴリ別にまとめています。"
+  />
+  <div class="p-snippet-groups">
+    {
+      groups.map((group) => (
+        <section class="p-snippet-group">
+          <h2
+            class="p-snippet-group__heading"
+            id={group.category.toLowerCase()}
+          >
+            {group.category}
+          </h2>
+          <ul class="p-snippet-list">
+            {group.items.map((c) => (
+              <li class="p-snippet-list__item">
+                <SnippetCategoryCard
+                  name={c.name}
+                  href={c.href}
+                  count={c.count}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </div>
+  <PrevNext
+    prev={{ href: "/changelog", label: "Update History" }}
+    next={firstSub
+      ? {
+          href: firstSub.href,
+          label: firstSub.name,
+        }
+      : undefined}
+  />
+</BaseLayout>
+
+<style>
+  .p-snippet-groups {
+    display: grid;
+    row-gap: var(--space-8);
+    padding-block: var(--space-4);
+  }
+
+  .p-snippet-group {
+    display: grid;
+    row-gap: var(--space-4);
+  }
+
+  .p-snippet-group__heading {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .p-snippet-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-4);
+  }
+</style>

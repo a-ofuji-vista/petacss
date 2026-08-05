@@ -1,0 +1,46 @@
+---
+const panel = { x: 24, y: 12, width: 152, height: 72 };
+const cell = 16;
+const cols = Math.floor(panel.width / cell);
+const rows = Math.floor(panel.height / cell);
+const originX = panel.x + (panel.width - cols * cell) / 2;
+const originY = panel.y + (panel.height - rows * cell) / 2;
+const hLines = Array.from(
+  { length: rows - 1 },
+  (_, i) => originY + (i + 1) * cell,
+);
+const vLines = Array.from(
+  { length: cols - 1 },
+  (_, i) => originX + (i + 1) * cell,
+);
+---
+
+<rect
+  class="c-snippet-category-card__panel"
+  x={panel.x}
+  y={panel.y}
+  width={panel.width}
+  height={panel.height}
+  rx="8"></rect>
+{
+  hLines.map((y) => (
+    <rect
+      class="c-snippet-category-card__divider"
+      x={panel.x}
+      y={y}
+      width={panel.width}
+      height="1"
+    />
+  ))
+}
+{
+  vLines.map((x) => (
+    <rect
+      class="c-snippet-category-card__divider"
+      x={x}
+      y={panel.y}
+      width="1"
+      height={panel.height}
+    />
+  ))
+}

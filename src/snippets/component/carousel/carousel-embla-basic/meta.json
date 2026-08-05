@@ -1,0 +1,6 @@
+{
+  "title": "Carousel embla basic",
+  "order": 1,
+  "description": "Embla Carousel（CDN）で左へ自動スクロールするカルーセル。",
+  "previewPadding": false
+}

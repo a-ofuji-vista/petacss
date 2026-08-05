@@ -1,0 +1,8 @@
+{
+  "title": "Link text hover slide",
+  "order": 4,
+  "description": "ホバー時に表示中のテキストが上へスライドし、同じテキストが下から表示されるテキストリンク。複数行にも対応。",
+  "previewDirection": "column",
+  "previewGap": "var(--space-4)",
+  "previewBackground": "#fff"
+}

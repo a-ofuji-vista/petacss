@@ -1,0 +1,7 @@
+{
+  "title": "Accordion basic",
+  "order": 1,
+  "description": "details/summary + JS によるアコーディオン。",
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

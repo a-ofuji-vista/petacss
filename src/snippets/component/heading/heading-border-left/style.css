@@ -1,0 +1,18 @@
+/* reset */
+:where(h2).heading-border-left {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-border-left {
+  --heading-accent: #2b36f5;
+  --heading-color: #364153;
+
+  padding-left: 12px;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+  border-left: 4px solid var(--heading-accent);
+}

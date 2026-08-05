@@ -1,0 +1,115 @@
+<form class="form-basic" action="#" method="post">
+  <div class="form-basic__field">
+    <label class="form-basic__label" for="form-basic-name">
+      お名前
+      <span class="form-basic__required" aria-hidden="true">必須</span>
+    </label>
+    <input
+      class="form-basic__input"
+      type="text"
+      id="form-basic-name"
+      name="name"
+      placeholder="山田 太郎"
+      autocomplete="name"
+      required
+    />
+  </div>
+
+  <div class="form-basic__field">
+    <label class="form-basic__label" for="form-basic-email">
+      メールアドレス
+      <span class="form-basic__required" aria-hidden="true">必須</span>
+    </label>
+    <input
+      class="form-basic__input"
+      type="email"
+      id="form-basic-email"
+      name="email"
+      placeholder="example@mail.com"
+      autocomplete="email"
+      required
+    />
+  </div>
+
+  <div class="form-basic__field">
+    <span class="form-basic__label">お問い合わせ種別</span>
+    <div class="form-basic__radio-group">
+      <label class="form-basic__radio">
+        <input
+          class="form-basic__radio-input"
+          type="radio"
+          name="category"
+          value="service"
+          checked
+        />
+        <span class="form-basic__radio-text">サービスについて</span>
+      </label>
+      <label class="form-basic__radio">
+        <input
+          class="form-basic__radio-input"
+          type="radio"
+          name="category"
+          value="recruit"
+        />
+        <span class="form-basic__radio-text">採用について</span>
+      </label>
+      <label class="form-basic__radio">
+        <input
+          class="form-basic__radio-input"
+          type="radio"
+          name="category"
+          value="other"
+        />
+        <span class="form-basic__radio-text">その他</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="form-basic__field">
+    <label class="form-basic__label" for="form-basic-subject">件名</label>
+    <select
+      class="select-basic js-select-basic"
+      id="form-basic-subject"
+      name="subject"
+      aria-label="件名"
+    >
+      <option value="" disabled selected hidden>選択してください</option>
+      <option value="quote">お見積もり</option>
+      <option value="support">サポート</option>
+      <option value="partnership">提携</option>
+    </select>
+  </div>
+
+  <div class="form-basic__field">
+    <label class="form-basic__label" for="form-basic-message">
+      お問い合わせ内容
+      <span class="form-basic__required" aria-hidden="true">必須</span>
+    </label>
+    <textarea
+      class="form-basic__textarea"
+      id="form-basic-message"
+      name="message"
+      rows="6"
+      placeholder="お問い合わせ内容をご記入ください"
+      required
+    ></textarea>
+  </div>
+
+  <div class="form-basic__field">
+    <label class="form-basic__checkbox">
+      <input
+        class="form-basic__checkbox-input"
+        type="checkbox"
+        name="privacy"
+        required
+      />
+      <span class="form-basic__checkbox-text">
+        <a href="#" class="form-basic__link">プライバシーポリシー</a>に同意する
+      </span>
+    </label>
+  </div>
+
+  <div class="form-basic__actions">
+    <button class="form-basic__submit" type="submit">送信する</button>
+  </div>
+</form>

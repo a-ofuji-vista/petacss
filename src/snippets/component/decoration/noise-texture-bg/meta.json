@@ -1,0 +1,6 @@
+{
+  "title": "Noise texture bg",
+  "order": 3,
+  "description": "ノイズテクスチャを全体に敷き詰めた背景装飾。ノイズテクスチャ画像を別途用意してください。",
+  "previewPadding": false
+}

@@ -1,0 +1,7 @@
+{
+  "title": "FAQ accordion",
+  "order": 1,
+  "description": "details/summary + JS によるQ&Aアコーディオン。",
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

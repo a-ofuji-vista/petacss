@@ -1,0 +1,7 @@
+{
+  "title": "Heading marquee bg",
+  "order": 2,
+  "description": "h2 見出しの背景に流れる装飾テキストを配置。Google Fonts の Barlow（Bold）が必要です。",
+  "previewPadding": false,
+  "previewBackground": "#fff"
+}

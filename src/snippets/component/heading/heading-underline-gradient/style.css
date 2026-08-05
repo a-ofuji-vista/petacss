@@ -1,0 +1,36 @@
+/* reset */
+:where(h2).heading-underline-gradient {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-underline-gradient {
+  --heading-color: #364153;
+  --heading-underline-width: 80px;
+  --heading-underline-height: 3px;
+  --heading-underline-gradient-start: #2b36f5;
+  --heading-underline-gradient-middle: #7c3aed;
+  --heading-underline-gradient-end: #d946ef;
+
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+  text-align: center;
+
+  &::after {
+    display: block;
+    width: var(--heading-underline-width);
+    height: var(--heading-underline-height);
+    margin-inline: auto;
+    margin-top: 10px;
+    content: "";
+    background: linear-gradient(
+      in oklch to right,
+      var(--heading-underline-gradient-start),
+      var(--heading-underline-gradient-middle),
+      var(--heading-underline-gradient-end)
+    );
+  }
+}

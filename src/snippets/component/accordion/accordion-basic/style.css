@@ -1,0 +1,137 @@
+/* reset */
+:where(ul).accordion-basic__menu {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+:where(summary).accordion-basic__trigger,
+:where(a).accordion-basic__link {
+  font: inherit;
+  text-decoration: none;
+}
+
+:where(summary).accordion-basic__trigger {
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+/* snippet */
+.accordion-basic {
+  --accordion-border: #e7e7e7;
+  --accordion-trigger-color: #364153;
+  --accordion-link-color: #5e6775;
+  --accordion-icon-color: #6a7282;
+  --accordion-accent: #2b36f5;
+  --accordion-focus-color: var(--accordion-accent);
+  --accordion-radius: 4px;
+  --accordion-duration: 0.3s;
+
+  width: 100%;
+  max-width: 320px;
+}
+
+.accordion-basic__list {
+  display: grid;
+}
+
+.accordion-basic__item {
+  border-bottom: 1px solid var(--accordion-border);
+}
+
+.accordion-basic__trigger {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  column-gap: 12px;
+  align-items: center;
+  min-height: var(--size-touch-target, 40px);
+  padding-block: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--accordion-trigger-color);
+  border-radius: var(--accordion-radius);
+}
+
+.accordion-basic__icon {
+  display: grid;
+  place-items: center;
+  color: var(--accordion-icon-color);
+  transition: transform var(--accordion-duration);
+}
+
+:is(
+  .accordion-basic:not(.accordion-basic--enhanced) .accordion-basic__item[open],
+  .accordion-basic--enhanced .accordion-basic__item--expanded
+) {
+  & .accordion-basic__icon {
+    transform: rotate(180deg);
+  }
+}
+
+.accordion-basic__menu {
+  display: grid;
+  row-gap: 4px;
+  padding-block: 4px 12px;
+}
+
+.accordion-basic__link {
+  display: grid;
+  align-items: center;
+  min-height: var(--size-touch-target, 40px);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--accordion-link-color);
+  border-radius: var(--accordion-radius);
+}
+
+/* open / close animation(JS 実行時) */
+.accordion-basic--enhanced .accordion-basic__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+}
+
+.accordion-basic--enhanced .accordion-basic__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.accordion-basic--enhanced
+  .accordion-basic__item--expanded
+  .accordion-basic__panel {
+  grid-template-rows: 1fr;
+}
+
+.accordion-basic--enhanced
+  .accordion-basic__item--animating
+  .accordion-basic__panel {
+  transition: grid-template-rows var(--accordion-duration) ease;
+}
+
+/* focus */
+.accordion-basic .accordion-basic__trigger,
+.accordion-basic .accordion-basic__link {
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--accordion-focus-color);
+    outline-offset: -2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .accordion-basic__icon,
+  .accordion-basic--enhanced
+    .accordion-basic__item--animating
+    .accordion-basic__panel {
+    transition: none;
+  }
+}

@@ -1,0 +1,104 @@
+---
+description: PETA CSS コーディングスタイルガイド
+globs: ["**/*.astro", "**/*.css", "src/lib/**/*.ts", "src/scripts/**/*.ts"]
+---
+
+# コーディングスタイル
+
+## CSS 全般
+
+- CSS クラスは BEM を使う（`Block__element--modifier`）
+- Block 名はケバブケース（例: `c-snippet-tabs`, `l-header`）。Element は `__`、Modifier は `--` で区切る
+- マージン・パディングは論理プロパティ（`margin-block`, `margin-inline` など）または物理プロパティ（`margin-top`, `padding-left` など）を使う
+- 位置指定は物理プロパティを使う（`top`, `right` など）
+- CSS変数は必ず `tokens.css` のトークンを使う。値の直書き禁止
+
+## プレフィックス
+
+サイト本体（`src/pages/`、`src/components/`、`src/layouts/`）の BEM Block 名には、次の 1 文字プレフィックスを付ける。
+
+- `p-` — ページ固有のマークアップ（`src/pages/`）。例: `p-about`, `p-changelog`
+- `l-` — サイト共通のレイアウト（`src/components/structures/`, `src/layouts/`）。例: `l-header`, `l-layout`
+- `c-` — 再利用 UI コンポーネント（`src/components/ui/`）。例: `c-snippet-tabs`, `c-prev-next`
+
+- スニペット（`src/snippets/`）はコピー先でそのまま使うため、`p-` / `l-` / `c-` は付けない
+- スニペットの Block 名はフォルダ名（スラグ）に揃え、種別が分かるプレフィックス（例: `button-`, `header-`）を付けてサイト全体で一意にする
+- JavaScript の DOM フック・状態クラスには `js-` プレフィックスを使う（例: `js-snippet-tabs`, `js-snippet-tabs__tab--active`）。JS が付け外しする状態は BEM の `--modifier` とは別に `js-*` を用意し、CSS も `js-*` を参照する
+
+## レイアウト
+
+- レイアウトは極力 `grid` を使う
+- `flex` は1方向の並びでも、アイテム数が動的な場合や `gap` だけが目的の場合に限り許容する
+- `place-items: center` など `grid` の短縮構文を積極的に使う
+
+## スペーシング
+
+- ページ全体のセクション間余白はレイアウトコンテナ（`BaseLayout` の `main` など）の `gap` で管理する
+- コンポーネント内部のコンテンツ間余白は `margin-top` を基本とする
+- `margin-bottom` を使ってよい例外（コンポーネント内部に限る）
+  - 次の要素が別コンポーネントで `margin-top` を制御できない場合
+  - 見出し直下のラベルやサブテキストなど、セットで使う要素間の余白
+  - `:last-child` で `margin-bottom: 0` をリセットするパターン
+
+## レスポンシブ
+
+- ブレークポイントは `width > 960px`（タブレット）と `width > 1280px`（デスクトップ）の2段階
+- `min-width` ではなく `width >` 構文を使う
+
+## @layer
+
+- レイヤー順は `reset, highlight, base` の順で `global.css` に宣言済み
+- コンポーネント固有のレイヤーはコンポーネント内で宣言する
+- レイヤー名はケバブケース（例: `nav-dialog-mobile`）
+
+## アニメーション・トランジション
+
+- ホバーのトランジションは `@media (any-hover: hover)` で囲む
+- スクロールアニメーションは `@media (prefers-reduced-motion: no-preference)` で囲む
+
+## アクセシビリティ
+
+- インタラクティブ要素のタッチターゲットは `var(--size-touch-target)`（40px）以上
+- フォーカスリングは `global.css` のグローバル定義で対応済み。コンポーネント側で `color` など追加の変化が必要な場合のみ `focus-visible` を追加する
+- 装飾目的の要素には `aria-hidden="true"` を付ける
+
+## Astro コンポーネント
+
+- ファイル名は BEM の Block 名からプレフィックス（`p-` / `l-` / `c-`）を除いた部分をパスカルケースにしたものにする（例: `c-snippet-tabs` → `SnippetTabs.astro`, `c-prev-next` → `PrevNext.astro`）
+- スタイルはコンポーネントの `<style>` に書く
+- グローバルに影響するスタイルは `global.css` に書く
+- Props の型は `interface Props` で定義する
+- ブラウザ上の DOM 操作は `.astro` の `<script>` に直書きせず、`src/scripts/` に置いて import する
+- `<script>` ブロックでは `import "../../scripts/…"` のみとし、ロジック本体は書かない
+
+## TypeScript（`src/lib` / `src/scripts`）
+
+- `src/lib/` — ビルド時・SSR 向け。データ取得、型、純関数、HTML 文字列の組み立て。Astro の frontmatter（`---`）から import する
+- `src/scripts/` — クライアント向け。`.js-*` フッククラスへのイベント配線。コンポーネントの `<script>` から import する
+- 依存方向は `scripts` → `lib` のみ。`lib` から `scripts` を import しない
+- クライアント初期化は `bindPageInit` + `initElements`（`init-elements.ts`）を使う。リスナーは cleanup 関数または `AbortController` で解除する
+
+## Git
+
+- コミットメッセージは日本語で書く
+
+### コミットメッセージ形式
+
+```
+<Type>: <Title>
+```
+
+- `Title` は日本語で書く
+
+### Type
+
+Typeごとの用途と例は以下の通りです。
+
+- `feat`: 新しい機能の実装（例: お問い合わせフォームの追加）
+- `wip`: 作業途中のコミット（例: 下層ページの実装途中）
+- `fix`: 軽微な修正、バグ修正（例: モバイル表示の崩れを修正）
+- `remove`: 実装した機能やファイルの削除（例: 不要になったコンポーネントを削除）
+- `style`: 見た目・CSS の調整（例: ヒーローセクションの余白調整、トランジション時間の変更）
+- `docs`: ドキュメントの修正（例: READMEの更新）
+- `refactor`: 実稼働コードのリファクタリング（例: CSS変数の整理）
+- `chore`: プロジェクトの維持や管理のために必要な作業（例: 依存パッケージの更新）

@@ -1,0 +1,77 @@
+/* reset */
+:where(a).link-underline-always-hover-slide {
+  font: inherit;
+  text-decoration: none;
+}
+
+/* snippet */
+.link-underline-always-hover-slide {
+  --link-color: #2b36f5;
+  --link-color-hover: #1f28a8;
+  --link-underline-height: 1px;
+  --link-underline-offset: 0.15em;
+  --link-focus-color: #2b36f5;
+  --link-focus-radius: 4px;
+  --link-duration: 0.3s;
+  --link-easing: ease;
+
+  display: inline-block;
+  line-height: 1.6;
+  color: var(--link-color);
+  border-radius: var(--link-focus-radius);
+}
+
+.link-underline-always-hover-slide .link-underline-always-hover-slide__text {
+  display: inline;
+  padding-bottom: var(--link-underline-offset);
+  background-image: linear-gradient(currentcolor, currentcolor);
+  background-repeat: no-repeat;
+  background-position: bottom left;
+  background-size: 100% var(--link-underline-height);
+  transition: background-size var(--link-duration) var(--link-easing);
+  box-decoration-break: slice;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .link-underline-always-hover-slide {
+    transition: color var(--link-duration) var(--link-easing);
+  }
+
+  .link-underline-always-hover-slide:hover {
+    color: var(--link-color-hover);
+  }
+
+  .link-underline-always-hover-slide:hover
+    .link-underline-always-hover-slide__text {
+    background-position: bottom right;
+    background-size: 0 var(--link-underline-height);
+  }
+}
+
+.link-underline-always-hover-slide:focus:not(:focus-visible) {
+  outline: none;
+}
+
+.link-underline-always-hover-slide:focus-visible {
+  outline: 2px solid var(--link-focus-color);
+  outline-offset: 2px;
+}
+
+.link-underline-always-hover-slide:focus-visible
+  .link-underline-always-hover-slide__text {
+  background-position: bottom left;
+  background-size: 100% var(--link-underline-height);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  @media (hover: hover) and (pointer: fine) {
+    .link-underline-always-hover-slide {
+      transition: none;
+    }
+
+    .link-underline-always-hover-slide
+      .link-underline-always-hover-slide__text {
+      transition: none;
+    }
+  }
+}

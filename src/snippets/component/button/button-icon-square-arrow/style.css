@@ -1,0 +1,104 @@
+/* reset */
+:where(a, button).button-icon-square-arrow {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-icon-square-arrow {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-icon-square-arrow {
+  --button-color: #3d4a5c;
+  --button-color-hover: #2b36f5;
+  --button-focus-color: #2b36f5;
+  --button-icon-size: 32px;
+  --button-icon-border: #c8c4bc;
+  --button-icon-border-hover: #2b36f5;
+  --button-icon-background-hover: #2b36f5;
+  --button-icon-color-hover: #fff;
+  --button-duration: 0.3s;
+  --button-easing: ease;
+
+  display: inline-flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: transparent;
+
+  @media (any-hover: hover) {
+    transition: color var(--button-duration) var(--button-easing);
+
+    &:hover {
+      color: var(--button-color-hover);
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+.button-icon-square-arrow__icon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  border: 1px solid var(--button-icon-border);
+  border-radius: 50%;
+
+  @media (any-hover: hover) {
+    transition:
+      border-color var(--button-duration) var(--button-easing),
+      background-color var(--button-duration) var(--button-easing),
+      color var(--button-duration) var(--button-easing);
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+@media (any-hover: hover) {
+  .button-icon-square-arrow:hover .button-icon-square-arrow__icon {
+    color: var(--button-icon-color-hover);
+    background-color: var(--button-icon-background-hover);
+    border-color: var(--button-icon-border-hover);
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-icon-square-arrow {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+
+  .button-icon-square-arrow__icon {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

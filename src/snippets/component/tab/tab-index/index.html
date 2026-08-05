@@ -1,0 +1,50 @@
+<div class="tab-index js-tab-index">
+  <div class="tab-index__list" role="tablist" aria-label="タブ">
+    <button
+      class="tab-index__tab js-tab-index-tab tab-index__tab--active"
+      type="button"
+      role="tab"
+      aria-selected="true"
+      data-tab="tab-1"
+    >
+      タブ1
+    </button>
+    <button
+      class="tab-index__tab js-tab-index-tab"
+      type="button"
+      role="tab"
+      aria-selected="false"
+      tabindex="-1"
+      data-tab="tab-2"
+    >
+      タブ2
+    </button>
+  </div>
+
+  <div class="tab-index__panels">
+    <section
+      class="tab-index__panel js-tab-index-panel tab-index__panel--active"
+      role="tabpanel"
+      data-panel="tab-1"
+    >
+      <div class="tab-index__inner">
+        <p class="tab-index__text">
+          タブ1のコンテンツです。ここに説明テキストが入ります。
+        </p>
+      </div>
+    </section>
+
+    <section
+      class="tab-index__panel js-tab-index-panel"
+      role="tabpanel"
+      data-panel="tab-2"
+      hidden
+    >
+      <div class="tab-index__inner">
+        <p class="tab-index__text">
+          タブ2のコンテンツです。ここに説明テキストが入ります。
+        </p>
+      </div>
+    </section>
+  </div>
+</div>

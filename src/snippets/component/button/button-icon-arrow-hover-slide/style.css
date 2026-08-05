@@ -1,0 +1,136 @@
+/* reset */
+:where(a, button).button-icon-arrow-hover-slide {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-icon-arrow-hover-slide {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-icon-arrow-hover-slide {
+  --button-background: #2b36f5;
+  --button-background-hover: #1f28a8;
+  --button-color: #fff;
+  --button-focus-color: #2b36f5;
+  --button-icon-size: 40px;
+  --button-icon-background: #fff;
+  --button-icon-color: #2b36f5;
+  --button-duration: 0.4s;
+  --button-easing: cubic-bezier(0.65, 0, 0.35, 1);
+
+  display: inline-grid;
+  grid-template-columns: 1fr auto 1fr;
+  column-gap: 8px;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-color: var(--button-background);
+  border-radius: calc(infinity * 1px);
+
+  &::before {
+    content: "";
+  }
+
+  @media (any-hover: hover) {
+    transition: background-color var(--button-duration) var(--button-easing);
+
+    &:hover {
+      background-color: var(--button-background-hover);
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+.button-icon-arrow-hover-slide__icon {
+  display: grid;
+  grid-column: 3;
+  justify-self: end;
+  width: var(--button-icon-size);
+  height: var(--button-icon-size);
+  overflow: hidden;
+  background-color: var(--button-icon-background);
+  border-radius: 50%;
+
+  svg {
+    grid-area: 1 / 1;
+    place-self: center;
+    width: 18px;
+    height: 18px;
+    fill: none;
+    stroke: var(--button-icon-color);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+
+    @media (any-hover: hover) {
+      transition: transform var(--button-duration) var(--button-easing);
+    }
+  }
+
+  svg:last-child {
+    transform: translateX(calc(var(--button-icon-size) * -1));
+  }
+}
+
+@media (any-hover: hover) {
+  .button-icon-arrow-hover-slide:hover
+    .button-icon-arrow-hover-slide__icon
+    svg:first-child {
+    transform: translateX(var(--button-icon-size));
+  }
+
+  .button-icon-arrow-hover-slide:hover
+    .button-icon-arrow-hover-slide__icon
+    svg:last-child {
+    transform: translateX(0);
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-icon-arrow-hover-slide {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+
+  .button-icon-arrow-hover-slide__icon svg {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+
+  @media (any-hover: hover) {
+    .button-icon-arrow-hover-slide:hover
+      .button-icon-arrow-hover-slide__icon
+      svg:first-child {
+      transform: none;
+    }
+
+    .button-icon-arrow-hover-slide:hover
+      .button-icon-arrow-hover-slide__icon
+      svg:last-child {
+      transform: translateX(calc(var(--button-icon-size) * -1));
+    }
+  }
+}

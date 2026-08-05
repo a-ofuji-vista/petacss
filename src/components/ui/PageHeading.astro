@@ -1,0 +1,57 @@
+---
+interface Props {
+  title: string;
+  count?: number;
+  lead?: string;
+}
+
+const { title, count, lead } = Astro.props;
+const formattedCount =
+  count !== undefined ? String(count).padStart(2, "0") : undefined;
+---
+
+<header class="c-page-heading">
+  <h1 class="c-page-heading__title">
+    <span class="c-page-heading__text">
+      {title}
+      {
+        formattedCount && (
+          <span class="c-page-heading__count" aria-hidden="true">
+            {formattedCount}
+          </span>
+        )
+      }
+    </span>
+  </h1>
+  {lead && <p class="c-page-heading__lead">{lead}</p>}
+</header>
+
+<style>
+  .c-page-heading__title {
+    margin-inline: var(--space-6);
+    font-size: var(--font-size-3xl);
+    font-style: italic;
+    font-weight: var(--font-weight-bold);
+  }
+
+  .c-page-heading__text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .c-page-heading__count {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 0.5em;
+    color: var(--color-accent);
+    translate: calc(100% + var(--space-1)) -10%;
+  }
+
+  .c-page-heading__lead {
+    margin-inline: var(--space-6);
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-fg-subtle);
+  }
+</style>

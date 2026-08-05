@@ -1,0 +1,8 @@
+{
+  "title": "Profile definition list",
+  "order": 2,
+  "description": "会社概要などの項目一覧。dl / dt / dd で、項目名（dt）と内容（dd）をペアで並べます。モバイル向け。768px 以上は grid で2列表示。",
+  "previewScroll": true,
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

@@ -1,0 +1,167 @@
+---
+import { getCategoryIcon } from "./snippet-category-icons";
+
+interface Props {
+  name: string;
+  href: string;
+  count: number;
+}
+
+const { name, href, count }: Props = Astro.props;
+const formattedCount = String(count).padStart(2, "0");
+const variant = name.toLowerCase();
+const Icon = getCategoryIcon(variant);
+---
+
+<a class="c-snippet-category-card" href={href}>
+  <span class="c-snippet-category-card__header">
+    <span class="c-snippet-category-card__title">{name}</span>
+    <span class="c-snippet-category-card__count">{formattedCount}</span>
+  </span>
+  <span class="c-snippet-category-card__preview">
+    <svg
+      class="c-snippet-category-card__image"
+      viewBox="0 0 200 96"
+      role="img"
+      aria-label={`${name} のイメージ`}
+    >
+      <Icon />
+    </svg>
+  </span>
+</a>
+
+<style>
+  .c-snippet-category-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    overflow: hidden;
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-lg);
+  }
+
+  .c-snippet-category-card__header {
+    display: flex;
+    gap: var(--space-2);
+    align-items: baseline;
+    justify-content: space-between;
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+    border-bottom: 1px solid var(--color-border-default);
+  }
+
+  .c-snippet-category-card__title {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+  }
+
+  .c-snippet-category-card__count {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-accent);
+  }
+
+  .c-snippet-category-card__preview {
+    display: grid;
+    place-items: center;
+    height: 140px;
+    background-color: var(--color-bg-surface);
+  }
+
+  .c-snippet-category-card__image {
+    width: 70%;
+    height: auto;
+  }
+
+  @media (any-hover: hover) {
+    .c-snippet-category-card {
+      transition: border-color var(--transition-fast);
+    }
+
+    .c-snippet-category-card__title {
+      transition: color var(--transition-fast);
+    }
+
+    .c-snippet-category-card:hover {
+      border-color: var(--color-accent);
+    }
+
+    .c-snippet-category-card:hover .c-snippet-category-card__title {
+      color: var(--color-accent);
+    }
+  }
+</style>
+
+<style is:global>
+  .c-snippet-category-card__image .c-snippet-category-card__panel {
+    fill: var(--color-bg-default);
+    stroke: var(--color-border-default);
+    stroke-width: 1;
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__placeholder {
+    fill: color-mix(in srgb, var(--color-bg-accent) 55%, transparent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__bar {
+    fill: var(--color-bg-accent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__bar--accent {
+    fill: var(--color-accent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__label-text {
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    fill: var(--color-bg-default);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__page-text {
+    font-size: 10px;
+    font-weight: var(--font-weight-bold);
+    fill: var(--color-fg-default);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__link-text {
+    font-size: 12px;
+    font-weight: var(--font-weight-bold);
+    fill: var(--color-accent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__divider {
+    fill: var(--color-border-default);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__accent-fill {
+    fill: var(--color-accent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__on-accent {
+    fill: var(--color-bg-default);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__icon-stroke {
+    fill: none;
+    stroke: var(--color-bg-accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .c-snippet-category-card__image
+    .c-snippet-category-card__icon-stroke--accent {
+    stroke: var(--color-accent);
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__check {
+    fill: none;
+    stroke: var(--color-bg-default);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .c-snippet-category-card__image .c-snippet-category-card__mark-answer {
+    fill: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  }
+</style>

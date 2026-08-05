@@ -1,0 +1,37 @@
+/* reset */
+:where(h2).heading-slash {
+  margin: 0;
+  font: inherit;
+}
+
+/* snippet */
+.heading-slash {
+  --heading-color: #364153;
+  --heading-slash-gap: 12px;
+  --heading-slash-angle: 32deg;
+
+  display: inline-flex;
+  gap: var(--heading-slash-gap);
+  align-items: center;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.5;
+  color: var(--heading-color);
+
+  &::before,
+  &::after {
+    flex-shrink: 0;
+    width: 1px;
+    height: 1.2em;
+    content: "";
+    background-color: var(--heading-color);
+  }
+
+  &::before {
+    transform: rotate(calc(var(--heading-slash-angle) * -1));
+  }
+
+  &::after {
+    transform: rotate(var(--heading-slash-angle));
+  }
+}

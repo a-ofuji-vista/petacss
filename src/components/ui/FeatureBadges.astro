@@ -1,0 +1,418 @@
+---
+import {
+  BROWSERS,
+  BROWSER_LABELS,
+  baselineDescription,
+  baselineLabel,
+  formatVersion,
+  snippetBaselineText,
+  type BaselineStatus,
+  type BrowserId,
+  type SnippetFeatureData,
+} from "../../lib/css-features";
+
+interface Props {
+  data: SnippetFeatureData;
+}
+
+const { data } = Astro.props;
+const { features, required, allSupported, availableSince, baseline } = data;
+
+const summaryText = allSupported
+  ? availableSince
+    ? `${availableSince}以降、すべてのブラウザーで利用可能です。`
+    : "すべてのブラウザーで利用可能です。"
+  : "一部のブラウザーでは利用できません。";
+
+const BASELINE_MODIFIERS: Record<"high" | "low" | "false", string> = {
+  high: "c-feature-badges__baseline--high",
+  low: "c-feature-badges__baseline--low",
+  false: "c-feature-badges__baseline--limited",
+};
+
+function baselineModifier(status: BaselineStatus): string {
+  return BASELINE_MODIFIERS[status === false ? "false" : status];
+}
+
+const snippetBaselineTitle = baselineDescription(
+  baseline.status ?? false,
+  baseline.sinceYear,
+);
+const snippetBaselineBadge = snippetBaselineText(baseline);
+
+/* Chrome / Edge: Simple Icons、Firefox: Simple Icons "Firefox Browser"(いずれも CC0)、Safari: 自作コンパスアイコン */
+const BROWSER_ICON_PATHS: Record<BrowserId, string> = {
+  chrome:
+    "M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-5.344 9.257c.206.01.413.016.621.016 6.627 0 12-5.373 12-12 0-1.54-.29-3.011-.818-4.364zM12 16.364a4.364 4.364 0 1 1 0-8.728 4.364 4.364 0 0 1 0 8.728Z",
+  edge: "M21.86 17.86q.14 0 .25.12.1.13.1.25t-.11.33l-.32.46-.43.53-.44.5q-.21.25-.38.42l-.22.23q-.58.53-1.34 1.04-.76.51-1.6.91-.86.4-1.74.64t-1.67.24q-.9 0-1.69-.28-.8-.28-1.48-.78-.68-.5-1.22-1.17-.53-.66-.92-1.44-.38-.77-.58-1.6-.2-.83-.2-1.67 0-1 .32-1.96.33-.97.87-1.8.14.95.55 1.77.41.82 1.02 1.5.6.68 1.38 1.21.78.54 1.64.9.86.36 1.77.56.92.2 1.8.2 1.12 0 2.18-.24 1.06-.23 2.06-.72l.2-.1.2-.05zm-15.5-1.27q0 1.1.27 2.15.27 1.06.78 2.03.51.96 1.24 1.77.74.82 1.66 1.4-1.47-.2-2.8-.74-1.33-.55-2.48-1.37-1.15-.83-2.08-1.9-.92-1.07-1.58-2.33T.36 14.94Q0 13.54 0 12.06q0-.81.32-1.49.31-.68.83-1.23.53-.55 1.2-.96.66-.4 1.35-.66.74-.27 1.5-.39.78-.12 1.55-.12.7 0 1.42.1.72.12 1.4.35.68.23 1.32.57.63.35 1.16.83-.35 0-.7.07-.33.07-.65.23v-.02q-.63.28-1.2.74-.57.46-1.05 1.04-.48.58-.87 1.26-.38.67-.65 1.39-.27.71-.42 1.44-.15.72-.15 1.38zM11.96.06q1.7 0 3.33.39 1.63.38 3.07 1.15 1.43.77 2.62 1.93 1.18 1.16 1.98 2.7.49.94.76 1.96.28 1 .28 2.08 0 .89-.23 1.7-.24.8-.69 1.48-.45.68-1.1 1.22-.64.53-1.45.88-.54.24-1.11.36-.58.13-1.16.13-.42 0-.97-.03-.54-.03-1.1-.12-.55-.1-1.05-.28-.5-.19-.84-.5-.12-.09-.23-.24-.1-.16-.1-.33 0-.15.16-.35.16-.2.35-.5.2-.28.36-.68.16-.4.16-.95 0-1.06-.4-1.96-.4-.91-1.06-1.64-.66-.74-1.52-1.28-.86-.55-1.79-.89-.84-.3-1.72-.44-.87-.14-1.76-.14-1.55 0-3.06.45T.94 7.55q.71-1.74 1.81-3.13 1.1-1.38 2.52-2.35Q6.68 1.1 8.37.58q1.7-.52 3.58-.52Z",
+  firefox:
+    "M8.824 7.287c.008 0 .004 0 0 0zm-2.8-1.4c.006 0 .003 0 0 0zm16.754 2.161c-.505-1.215-1.53-2.528-2.333-2.943.654 1.283 1.033 2.57 1.177 3.53l.002.02c-1.314-3.278-3.544-4.6-5.366-7.477-.091-.147-.184-.292-.273-.446a3.545 3.545 0 01-.13-.24 2.118 2.118 0 01-.172-.46.03.03 0 00-.027-.03.038.038 0 00-.021 0l-.006.001a.037.037 0 00-.01.005L15.624 0c-2.585 1.515-3.657 4.168-3.932 5.856a6.197 6.197 0 00-2.305.587.297.297 0 00-.147.37c.057.162.24.24.396.17a5.622 5.622 0 012.008-.523l.067-.005a5.847 5.847 0 011.957.222l.095.03a5.816 5.816 0 01.616.228c.08.036.16.073.238.112l.107.055a5.835 5.835 0 01.368.211 5.953 5.953 0 012.034 2.104c-.62-.437-1.733-.868-2.803-.681 4.183 2.09 3.06 9.292-2.737 9.02a5.164 5.164 0 01-1.513-.292 4.42 4.42 0 01-.538-.232c-1.42-.735-2.593-2.121-2.74-3.806 0 0 .537-2 3.845-2 .357 0 1.38-.998 1.398-1.287-.005-.095-2.029-.9-2.817-1.677-.422-.416-.622-.616-.8-.767a3.47 3.47 0 00-.301-.227 5.388 5.388 0 01-.032-2.842c-1.195.544-2.124 1.403-2.8 2.163h-.006c-.46-.584-.428-2.51-.402-2.913-.006-.025-.343.176-.389.206-.406.29-.787.616-1.136.974-.397.403-.76.839-1.085 1.303a9.816 9.816 0 00-1.562 3.52c-.003.013-.11.487-.19 1.073-.013.09-.026.181-.037.272a7.8 7.8 0 00-.069.667l-.002.034-.023.387-.001.06C.386 18.795 5.593 24 12.016 24c5.752 0 10.527-4.176 11.463-9.661.02-.149.035-.298.052-.448.232-1.994-.025-4.09-.753-5.844z",
+  safari:
+    "M12 1a11 11 0 1 0 0 22 11 11 0 0 0 0-22zm0 2a9 9 0 1 1 0 18 9 9 0 0 1 0-18zm5 4-7.2 2.8L7 17l7.2-2.8L17 7zm-5 3.6a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z",
+};
+
+function browserTitle(browser: BrowserId): string {
+  const version = required[browser];
+  return version === false
+    ? `${BROWSER_LABELS[browser]}: 非対応`
+    : `${BROWSER_LABELS[browser]} ${formatVersion(version)}`;
+}
+
+function supportTitle(feature: (typeof features)[number]): string {
+  const versions = BROWSERS.map(
+    (b) => `${BROWSER_LABELS[b]} ${formatVersion(feature.support[b])}`,
+  ).join(" / ");
+  if (!feature.baseline) return versions;
+  const year = feature.baseline.lowDate?.slice(0, 4);
+  return `${versions} | Baseline: ${baselineLabel(feature.baseline.status)}${year ? ` (${year})` : ""}`;
+}
+---
+
+{
+  features.length > 0 && (
+    <details class="c-feature-badges">
+      <summary class="c-feature-badges__summary">
+        <span class="c-feature-badges__browsers">
+          {BROWSERS.map((browser) => (
+            <span
+              class="c-feature-badges__browser-icon"
+              role="img"
+              aria-label={browserTitle(browser)}
+              title={browserTitle(browser)}
+            >
+              <svg
+                class="c-feature-badges__logo"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path d={BROWSER_ICON_PATHS[browser]} />
+              </svg>
+              <svg
+                class:list={[
+                  "c-feature-badges__mark",
+                  {
+                    "c-feature-badges__mark--ng": required[browser] === false,
+                  },
+                ]}
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                {required[browser] === false ? (
+                  <path d="M18 6 6 18M6 6l12 12" />
+                ) : (
+                  <path d="M20 6 9 17l-5-5" />
+                )}
+              </svg>
+            </span>
+          ))}
+        </span>
+        <span class="c-feature-badges__summary-text">{summaryText}</span>
+        <svg
+          class="c-feature-badges__chevron"
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </summary>
+
+      <div class="c-feature-badges__body">
+        {baseline.status !== null && (
+          <dl class="c-feature-badges__group">
+            <dt class="c-feature-badges__label">Baseline</dt>
+            <dd class="c-feature-badges__items">
+              <span
+                class:list={[
+                  "c-feature-badges__baseline",
+                  baselineModifier(baseline.status),
+                ]}
+                title={snippetBaselineTitle}
+              >
+                <svg
+                  class="c-feature-badges__baseline-icon"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path d="M12 3 2 12l10 9 10-9-10-9zm0 4.05L16.5 12 12 16.05 7.5 12 12 7.05z" />
+                </svg>
+                <span class="c-feature-badges__baseline-name">Baseline</span>
+                {snippetBaselineBadge}
+              </span>
+            </dd>
+          </dl>
+        )}
+        <dl class="c-feature-badges__group">
+          <dt class="c-feature-badges__label">対応ブラウザ</dt>
+          <dd class="c-feature-badges__items">
+            {BROWSERS.map((browser) => (
+              <span
+                class:list={[
+                  "c-feature-badges__browser",
+                  {
+                    "c-feature-badges__browser--unsupported":
+                      required[browser] === false,
+                  },
+                ]}
+              >
+                {BROWSER_LABELS[browser]}
+                <span class="c-feature-badges__version">
+                  {formatVersion(required[browser])}
+                </span>
+              </span>
+            ))}
+          </dd>
+        </dl>
+        <dl class="c-feature-badges__group">
+          <dt class="c-feature-badges__label">使用機能</dt>
+          <dd class="c-feature-badges__items">
+            {features.map((feature) =>
+              feature.mdnUrl ? (
+                <a
+                  class="c-feature-badges__feature c-feature-badges__feature--link"
+                  href={feature.mdnUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={supportTitle(feature)}
+                >
+                  {feature.label}
+                </a>
+              ) : (
+                <span
+                  class="c-feature-badges__feature"
+                  title={supportTitle(feature)}
+                >
+                  {feature.label}
+                </span>
+              ),
+            )}
+          </dd>
+        </dl>
+      </div>
+    </details>
+  )
+}
+
+<style>
+  .c-feature-badges {
+    margin-top: var(--space-2);
+    overflow: hidden;
+    background-color: var(--color-bg-surface);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-md);
+  }
+
+  .c-feature-badges__summary {
+    display: flex;
+    column-gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-2) var(--space-3);
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    border-radius: var(--radius-md);
+  }
+
+  .c-feature-badges[open] .c-feature-badges__summary {
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+  }
+
+  .c-feature-badges__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .c-feature-badges__summary:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .c-feature-badges__summary:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: calc(-1 * var(--focus-ring-width));
+  }
+
+  @media (any-hover: hover) {
+    .c-feature-badges__summary:hover {
+      background-color: var(--color-bg-accent);
+    }
+  }
+
+  .c-feature-badges__browsers {
+    display: flex;
+    flex-shrink: 0;
+    column-gap: var(--space-2);
+  }
+
+  .c-feature-badges__browser-icon {
+    position: relative;
+    display: inline-flex;
+    color: var(--color-fg-subtle);
+  }
+
+  .c-feature-badges__logo {
+    width: 18px;
+    height: 18px;
+    fill: currentcolor;
+  }
+
+  .c-feature-badges__mark {
+    position: absolute;
+    right: -5px;
+    bottom: -4px;
+    box-sizing: content-box;
+    width: 9px;
+    height: 9px;
+    padding: 1px;
+    color: var(--color-success);
+    background-color: var(--color-bg-surface);
+    border-radius: var(--radius-full);
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .c-feature-badges__mark--ng {
+    color: var(--color-danger);
+  }
+
+  .c-feature-badges__summary-text {
+    flex: 1;
+    min-width: 0;
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-base);
+    color: var(--color-fg-subtle);
+  }
+
+  .c-feature-badges__baseline {
+    display: inline-flex;
+    flex-shrink: 0;
+    column-gap: 0.25em;
+    align-items: center;
+    padding: 0.125rem var(--space-2);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--line-height-base);
+    white-space: nowrap;
+    border-radius: var(--radius-full);
+  }
+
+  .c-feature-badges__baseline--high {
+    color: var(--color-baseline-high-fg);
+    background-color: var(--color-baseline-high-bg);
+  }
+
+  .c-feature-badges__baseline--low {
+    color: var(--color-baseline-low-fg);
+    background-color: var(--color-baseline-low-bg);
+  }
+
+  .c-feature-badges__baseline--limited {
+    color: var(--color-baseline-limited-fg);
+    background-color: var(--color-baseline-limited-bg);
+  }
+
+  .c-feature-badges__baseline-icon {
+    flex-shrink: 0;
+    width: 14px;
+    height: 14px;
+    fill: currentcolor;
+  }
+
+  .c-feature-badges__baseline-name {
+    font-weight: var(--font-weight-bold);
+  }
+
+  .c-feature-badges__chevron {
+    flex-shrink: 0;
+    width: 16px;
+    height: 16px;
+    margin-left: auto;
+    color: var(--color-fg-subtle);
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: rotate var(--transition-fast);
+  }
+
+  .c-feature-badges[open] .c-feature-badges__chevron {
+    rotate: 180deg;
+  }
+
+  .c-feature-badges__body {
+    display: grid;
+    row-gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) var(--space-3);
+    border-top: 1px solid var(--color-border-default);
+  }
+
+  .c-feature-badges__group {
+    display: flex;
+    column-gap: var(--space-2);
+    align-items: baseline;
+  }
+
+  .c-feature-badges__label {
+    flex-shrink: 0;
+    font-size: var(--font-size-xs);
+    color: var(--color-fg-subtle);
+  }
+
+  .c-feature-badges__items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+  }
+
+  .c-feature-badges__browser,
+  .c-feature-badges__feature {
+    display: inline-flex;
+    column-gap: 0.25em;
+    align-items: baseline;
+    padding: 0.125rem var(--space-2);
+    font-size: var(--font-size-xs);
+    line-height: var(--line-height-base);
+    color: var(--color-fg-subtle);
+    background-color: var(--color-bg-default);
+    border: 1px solid var(--color-border-default);
+    border-radius: var(--radius-full);
+  }
+
+  .c-feature-badges__browser--unsupported {
+    color: var(--color-fg-inactive);
+    text-decoration: line-through;
+  }
+
+  .c-feature-badges__version {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-fg-default);
+  }
+
+  .c-feature-badges__browser--unsupported .c-feature-badges__version {
+    color: inherit;
+  }
+
+  .c-feature-badges__feature--link {
+    text-decoration: none;
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast);
+  }
+
+  @media (any-hover: hover) {
+    .c-feature-badges__feature--link:hover {
+      color: var(--color-accent);
+      border-color: var(--color-accent);
+    }
+  }
+
+  .c-feature-badges__feature--link:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  .c-feature-badges__feature--link:focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+</style>

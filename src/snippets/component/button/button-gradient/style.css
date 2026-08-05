@@ -1,0 +1,72 @@
+/* reset */
+:where(a, button).button-gradient {
+  box-sizing: border-box;
+  font: inherit;
+  text-decoration: none;
+  appearance: none;
+  cursor: pointer;
+  border: none;
+}
+
+:where(button).button-gradient {
+  vertical-align: middle;
+  text-align: inherit;
+}
+
+/* snippet */
+.button-gradient {
+  --button-gradient-start: #2b36f5;
+  --button-gradient-middle: #7c3aed;
+  --button-gradient-end: #d946ef;
+  --button-color: #fff;
+  --button-focus-color: #2b36f5;
+  --button-duration: 0.4s;
+  --button-easing: cubic-bezier(0.65, 0, 0.35, 1);
+
+  display: inline-grid;
+  place-items: center;
+  width: 100%;
+  max-width: 320px;
+  padding: 24px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--button-color);
+  background-image: linear-gradient(
+    in oklch to right,
+    var(--button-gradient-start),
+    var(--button-gradient-middle),
+    var(--button-gradient-end),
+    var(--button-gradient-end),
+    var(--button-gradient-middle),
+    var(--button-gradient-start)
+  );
+  background-position: 0% 0%;
+  background-size: 200% 100%;
+  border-radius: calc(infinity * 1px);
+
+  @media (any-hover: hover) {
+    transition: background-position var(--button-duration) var(--button-easing);
+
+    &:hover {
+      background-position: 100% 0%;
+    }
+  }
+
+  &:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--button-focus-color);
+    outline-offset: 2px;
+  }
+}
+
+/* reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .button-gradient {
+    @media (any-hover: hover) {
+      transition: none;
+    }
+  }
+}

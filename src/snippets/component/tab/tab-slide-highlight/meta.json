@@ -1,0 +1,7 @@
+{
+  "title": "Tab slide highlight",
+  "order": 2,
+  "description": "基本的なタブ切り替え。アクティブタブの下線がスライドして移動する。キーボード操作（←→ / Home / End）対応。",
+  "previewDirection": "column",
+  "previewBackground": "#fff"
+}

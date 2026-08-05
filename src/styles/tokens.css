@@ -1,0 +1,148 @@
+:root {
+  /* font families */
+  --font-sans: "Inter", "Noto Sans JP", sans-serif;
+
+  /* font sizes */
+  --font-size-xs: 0.75rem; /* 12px */
+  --font-size-sm: 0.875rem; /* 14px */
+  --font-size-base: 1rem; /* 16px */
+  --font-size-lg: 1.125rem; /* 18px */
+  --font-size-xl: 1.25rem; /* 20px */
+  --font-size-2xl: 1.5rem; /* 24px */
+  --font-size-3xl: 1.875rem; /* 30px */
+
+  /* font weights */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+
+  /* line heights */
+  --line-height-base: 1.25;
+  --line-height-relaxed: 1.6;
+
+  /* spacing */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.25rem; /* 20px */
+  --space-6: 1.5rem; /* 24px */
+  --space-7: 1.75rem; /* 28px */
+  --space-8: 2rem; /* 32px */
+  --space-9: 2.25rem; /* 36px */
+  --space-10: 2.5rem; /* 40px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+
+  /* border radius */
+  --radius-sm: 0.5rem; /* 8px */
+  --radius-md: 0.75rem; /* 12px */
+  --radius-lg: 1rem; /* 16px */
+  --radius-xl: 2rem; /* 32px */
+  --radius-2xl: 2.5rem; /* 40px */
+  --radius-full: calc(infinity * 1px);
+
+  /* color scheme */
+  color-scheme: light;
+
+  /* colors */
+  --color-fg-default: #364153;
+  --color-fg-subtle: #5e6775;
+  --color-fg-inactive: #c3c6cb;
+  --color-bg-default: #fff;
+  --color-bg-main: #fafafa;
+  --color-bg-surface: #f5f5f5;
+  --color-bg-accent: #d8daff;
+  --color-accent: #2b36f5;
+  --color-gradient-purple: #7c3aed;
+  --gradient-cta: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    var(--color-gradient-purple) 100%
+  );
+  --color-focus: var(--color-accent);
+  --color-selection-bg: #f97316;
+  --color-selection-fg: #fffbeb;
+  --color-success: #1a7f37;
+  --color-danger: #c93030;
+  --color-baseline-high-bg: #098551;
+  --color-baseline-high-fg: #fff;
+  --color-baseline-low-bg: #e3f7eb;
+  --color-baseline-low-fg: #04673b;
+  --color-baseline-limited-bg: #697282;
+  --color-baseline-limited-fg: #fff;
+  --color-border-default: #e7e7e7;
+  --color-bg-header: color-mix(
+    in srgb,
+    var(--color-bg-default) 72%,
+    transparent
+  );
+  --color-border-header: color-mix(
+    in srgb,
+    var(--color-border-default) 60%,
+    transparent
+  );
+  --blur-header: 12px;
+  --color-code-bg: #282936;
+
+  /* focus ring */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 0;
+
+  /* layout */
+  --layout-max-width: 1280px;
+  --layout-main-max-width: 736px;
+  --layout-sidebar-width: 265px;
+  --layout-min-width: 275px;
+  --layout-header-height: 56px;
+
+  /* z-index */
+  --z-header: 1;
+  --z-nav-dialog: 2;
+  --z-search-dialog: 3;
+
+  /* sizing */
+  --size-touch-target: 40px;
+
+  /* transition */
+  --transition-fast: 0.15s ease;
+  --transition-slow: 0.4s ease;
+
+  /* code block scrollbar */
+  --scrollbar-code-size: var(--space-2);
+  --color-code-scrollbar-track: var(--color-code-bg);
+  --color-code-scrollbar-thumb: #44475a;
+  --color-code-scrollbar-thumb-hover: #6272a4;
+
+  /* preview scrollbar */
+  --scrollbar-preview-size: var(--space-2);
+  --color-preview-scrollbar-track: var(--color-bg-surface);
+  --color-preview-scrollbar-thumb: var(--color-fg-inactive);
+  --color-preview-scrollbar-thumb-hover: var(--color-fg-subtle);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* colors */
+  --color-fg-default: #e6e8ec;
+  --color-fg-subtle: #9aa1ad;
+  --color-fg-inactive: #4c5360;
+  --color-bg-default: #14161b;
+  --color-bg-main: #181b21;
+  --color-bg-surface: #20242b;
+  --color-bg-accent: #2b2f63;
+  --color-accent: #8b93ff;
+  --color-gradient-purple: #c084fc;
+  --color-success: #4ecb71;
+  --color-danger: #f47067;
+  --color-baseline-high-bg: #3d8f67;
+  --color-baseline-high-fg: #fff;
+  --color-baseline-low-bg: #1e3a2f;
+  --color-baseline-low-fg: #7dcea0;
+  --color-baseline-limited-bg: #4c5360;
+  --color-baseline-limited-fg: #e6e8ec;
+  --color-border-default: #2b2f37;
+}

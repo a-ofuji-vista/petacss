@@ -1,0 +1,34 @@
+<div class="l-footer-brand">
+  <img
+    class="l-footer-brand__mascot"
+    src="/brand/mascot.svg"
+    alt=""
+    width="40"
+    height="40"
+  />
+  <span class="l-footer-brand__wordmark" role="img" aria-label="PETA CSS"
+  ></span>
+</div>
+
+<style>
+  .l-footer-brand {
+    display: grid;
+    row-gap: var(--space-8);
+  }
+
+  .l-footer-brand__mascot {
+    justify-self: center;
+  }
+
+  .l-footer-brand__wordmark {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 723 / 135;
+    background-color: var(--color-bg-surface);
+    mask-image: url("/brand/wordmark.svg");
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: 100% 100%;
+  }
+</style>

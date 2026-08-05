@@ -1,0 +1,6 @@
+{
+  "title": "Carousel embla card",
+  "order": 3,
+  "description": "Embla Carousel（CDN）でカードをスライド表示。左下に矢印、右下にドットページネーション。",
+  "previewPadding": true
+}
