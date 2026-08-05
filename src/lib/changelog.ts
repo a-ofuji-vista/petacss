@@ -6,20 +6,8 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
   {
-    date: "2026-06-12",
-    added: [
-      "PETA CSS サイトを公開",
-      "Button / Header スニペットを追加",
-      "Preview / HTML / CSS タブとコピー機能を実装",
-    ],
-  },
-  {
-    date: "2026-05-20",
-    added: ["Update History ページを追加", "リリースバナーを追加"],
-    changed: [
-      "グローバルナビに Update History リンクを追加",
-      "トップページの Previous / Next ナビを更新",
-    ],
+    date: "2026-08-05",
+    added: ["PETA CSS サイトを公開"],
   },
 ];
 
