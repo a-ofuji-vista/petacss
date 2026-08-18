@@ -1,0 +1,182 @@
+/* GSAP と ScrollTrigger を CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* --animation-viewport-height でピン留めする領域の高さを変更できます。 */
+
+/* reset */
+:where(.animation-horizontal-scroll) {
+  box-sizing: border-box;
+}
+
+:where(p).animation-horizontal-scroll__hint,
+:where(figure).animation-horizontal-scroll__panel,
+:where(figcaption).animation-horizontal-scroll__caption {
+  margin: 0;
+}
+
+:where(img).animation-horizontal-scroll__image {
+  display: block;
+}
+
+/* snippet */
+.animation-horizontal-scroll {
+  --animation-background: #fff;
+  --animation-hint-color: #5e6775;
+  --animation-caption-color: #fff;
+  --animation-viewport-height: min(240px, 100vh);
+
+  width: 100%;
+  background-color: var(--animation-background);
+}
+
+.animation-horizontal-scroll__intro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-horizontal-scroll__outro {
+  display: grid;
+  place-items: center;
+  min-height: max(400px, calc(100vh - var(--animation-viewport-height)));
+  padding: 24px;
+}
+
+.animation-horizontal-scroll__scroll-hint {
+  display: grid;
+  row-gap: 8px;
+  justify-items: center;
+  color: var(--animation-hint-color);
+}
+
+.animation-horizontal-scroll__hint {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--animation-hint-color);
+  text-align: center;
+}
+
+.animation-horizontal-scroll__arrow {
+  display: grid;
+  animation: animation-horizontal-scroll-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes animation-horizontal-scroll-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animation-horizontal-scroll__section {
+  width: 100%;
+}
+
+.animation-horizontal-scroll__viewport {
+  position: sticky;
+  top: max(0px, calc((100% - var(--animation-viewport-height)) / 2));
+  display: grid;
+  height: var(--animation-viewport-height);
+  min-height: 0;
+  overflow: auto hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.animation-horizontal-scroll__track {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  padding-inline: 24px;
+}
+
+.js-animation-horizontal-scroll--active .animation-horizontal-scroll__viewport {
+  overflow: hidden;
+}
+
+.js-animation-horizontal-scroll--active .animation-horizontal-scroll__track {
+  width: 100%;
+  will-change: transform;
+}
+
+.animation-horizontal-scroll__panel {
+  position: relative;
+  display: grid;
+  flex: 0 0 min(72vw, 480px);
+  grid-template: 1fr / 1fr;
+  align-self: stretch;
+  min-width: 0;
+  min-height: 0;
+  max-height: 100%;
+  overflow: hidden;
+  border-radius: 12px;
+  isolation: isolate;
+}
+
+.animation-horizontal-scroll__panel::after {
+  z-index: 1;
+  grid-area: 1 / 1;
+  pointer-events: none;
+  content: "";
+  background: linear-gradient(
+    180deg,
+    rgb(0 0 0 / 0%) 45%,
+    rgb(0 0 0 / 55%) 100%
+  );
+}
+
+.animation-horizontal-scroll__image {
+  grid-area: 1 / 1;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+}
+
+.animation-horizontal-scroll__caption {
+  z-index: 2;
+  display: grid;
+  grid-area: 1 / 1;
+  gap: 2px;
+  align-self: end;
+  min-width: 0;
+  padding: 16px;
+  overflow: hidden;
+  color: var(--animation-caption-color);
+}
+
+.animation-horizontal-scroll__index {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.animation-horizontal-scroll__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-horizontal-scroll__arrow {
+    animation: none;
+  }
+
+  .animation-horizontal-scroll__viewport {
+    overflow-x: auto;
+  }
+
+  .animation-horizontal-scroll__track {
+    width: max-content;
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "title": "Animation text split",
+  "order": 2,
+  "description": "GSAP + ScrollTrigger（CDN）。テキストを一文字ずつ分割してアニメーション。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewDirection": "column"
+}

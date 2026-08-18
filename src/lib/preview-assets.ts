@@ -17,14 +17,9 @@ const IMAGE_MIME: Record<string, string> = {
 // （詳細は inlinePreviewAssets の doc コメントを参照）。安易に拡張子を追加しないこと。
 const IMAGE_EXT = "(?:gif|jpe?g|png|svg|webp)";
 const PUBLIC_IMAGE_PATH = `\\/[^"'\\)\\s]+\\.${IMAGE_EXT}`;
-const PUBLIC_VIDEO_PATH = "\\/snippets\\/[^\"'\\s]+\\.(?:mp4|webm)";
 
 const SRC_ATTR_PATTERN = new RegExp(
   `src=(["'])(${PUBLIC_IMAGE_PATH})\\1`,
-  "gi",
-);
-const VIDEO_SRC_ATTR_PATTERN = new RegExp(
-  `src=(["'])(${PUBLIC_VIDEO_PATH})\\1`,
   "gi",
 );
 const CSS_URL_PATTERN = new RegExp(
@@ -53,29 +48,12 @@ function inlinePublicAsset(assetPath: string): string | undefined {
 }
 
 /**
- * Preview 用 HTML 内の /snippets/*.mp4|webm を、Astro base 付きの絶対 URL に書き換える。
- * `<base href>` は path 付き base を指すが、先頭 `/` の絶対パスは base path を無視するため。
- */
-export function rewritePreviewMediaUrls(
-  html: string,
-  assetBaseUrl: string,
-): string {
-  const base = assetBaseUrl.replace(/\/+$/, "");
-  return html.replace(
-    VIDEO_SRC_ATTR_PATTERN,
-    (_match, quote: string, assetPath: string) =>
-      `src=${quote}${base}${assetPath}${quote}`,
-  );
-}
-
-/**
  * Preview 用 HTML 内の public 配下画像を data URI に差し替える。
  * sandbox 付き srcdoc は opaque origin のため dev サーバーが 403 するのを避ける。
  * コピー用 HTML（SnippetTabs の HTML タブ）は変更しない。
  *
  * 動画は対象外。data URI 化すると数 MB の base64 がページ HTML に直接載り、
  * Range リクエストもブラウザキャッシュも効かなくなるため URL のまま配信し、
- * rewritePreviewMediaUrls で base 付き絶対 URL にしたうえで、
  * dev サーバーの 403 は astro.config.mjs の allowSandboxedPreviewMedia で回避する。
  */
 export function inlinePreviewAssets(html: string): string {
@@ -167,9 +145,11 @@ export async function inlinePreviewExternalScripts(
   for (const match of matches) {
     const content = scriptContentCache.get(match[2]);
     if (content === undefined) continue;
+    // 置換文字列だと GSAP 等に含まれる `$&` / `$'` が replace の特殊パターンになり、
+    // 後続の script タグや DOM を壊す。関数 replacer なら挿入文字列はそのまま使われる。
     result = result.replace(
       match[0],
-      `<script>${escapeForScriptElement(content)}</script>`,
+      () => `<script>${escapeForScriptElement(content)}</script>`,
     );
   }
 

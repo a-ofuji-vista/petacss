@@ -1,4 +1,5 @@
 import AccordionIcon from "./AccordionIcon.astro";
+import AnimationIcon from "./AnimationIcon.astro";
 import BreadcrumbIcon from "./BreadcrumbIcon.astro";
 import ButtonIcon from "./ButtonIcon.astro";
 import CardIcon from "./CardIcon.astro";
@@ -21,6 +22,7 @@ import TabIcon from "./TabIcon.astro";
 
 export const categoryIconMap = {
   accordion: AccordionIcon,
+  animation: AnimationIcon,
   breadcrumb: BreadcrumbIcon,
   button: ButtonIcon,
   card: CardIcon,

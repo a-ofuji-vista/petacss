@@ -58,13 +58,13 @@ function setupOpenPreviewButton(button: HTMLButtonElement): () => void {
       const previewObjectUrl = URL.createObjectURL(previewBlob);
       const theme = resolveTheme(document.documentElement.dataset.theme);
       const previewUrl = `${previewObjectUrl}#theme=${theme}`;
-      const openedWindow = window.open(
-        previewUrl,
-        "_blank",
-        "noopener,noreferrer",
-      );
+      // noopener / noreferrer を付けると window.open が null を返し、
+      // タブのライフサイクル監視や blob revoke ができなくなる。
+      // opener は親側とプレビュー HTML 先頭の bridge スクリプトの両方で切る。
+      const openedWindow = window.open(previewUrl, "_blank");
 
       if (openedWindow) {
+        openedWindow.opener = null;
         schedulePreviewBlobRevoke(openedWindow, previewObjectUrl);
       } else {
         URL.revokeObjectURL(previewObjectUrl);

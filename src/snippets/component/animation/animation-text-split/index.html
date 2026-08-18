@@ -1,0 +1,74 @@
+<div class="animation-text-split js-animation-text-split">
+  <div class="animation-text-split__intro">
+    <div class="animation-text-split__scroll-hint">
+      <p class="animation-text-split__hint">
+        スクロールするとテキストが一文字ずつ出現します
+      </p>
+      <span class="animation-text-split__arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path
+            d="M4 6l4 4 4-4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <div class="animation-text-split__list">
+    <section class="animation-text-split__block">
+      <p class="animation-text-split__label">Mixed</p>
+      <p
+        class="animation-text-split__text js-animation-text-split-target"
+        data-animation-text-split-mode="mixed"
+      >
+        一文字ずつ、様々な動きで
+      </p>
+    </section>
+
+    <section class="animation-text-split__block">
+      <p class="animation-text-split__label">Wave</p>
+      <p
+        class="animation-text-split__text js-animation-text-split-target"
+        data-animation-text-split-mode="wave"
+      >
+        波のように順番に現れる
+      </p>
+    </section>
+
+    <section class="animation-text-split__block">
+      <p class="animation-text-split__label">Pop</p>
+      <p
+        class="animation-text-split__text animation-text-split__text--pop js-animation-text-split-target"
+        data-animation-text-split-mode="pop"
+      >
+        弾むようにポップイン
+      </p>
+    </section>
+  </div>
+
+  <section
+    class="animation-text-split__scrub"
+    aria-label="スクロール連動テキスト"
+  >
+    <div class="animation-text-split__scrub-section">
+      <div class="animation-text-split__scrub-viewport">
+        <p class="animation-text-split__label">Reveal</p>
+        <p
+          class="animation-text-split__text animation-text-split__text--scrub js-animation-text-split-target"
+          data-animation-text-split-mode="scrub"
+        >
+          スクロールに合わせて一文字ずつ浮かび上がる
+        </p>
+      </div>
+    </div>
+
+    <div class="animation-text-split__outro"></div>
+  </section>
+</div>
+
+<script src="https://unpkg.com/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>

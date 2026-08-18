@@ -1,0 +1,90 @@
+/* reset */
+:where(.animation-gsap-fade-in) {
+  box-sizing: border-box;
+}
+
+:where(p).animation-gsap-fade-in__hint,
+:where(figure).animation-gsap-fade-in__item {
+  margin: 0;
+}
+
+:where(img).animation-gsap-fade-in__image {
+  display: block;
+}
+
+/* snippet */
+.animation-gsap-fade-in {
+  --animation-background: #fff;
+  --animation-hint-color: #5e6775;
+
+  width: 100%;
+  background-color: var(--animation-background);
+}
+
+.animation-gsap-fade-in__intro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-gsap-fade-in__scroll-hint {
+  display: grid;
+  row-gap: 8px;
+  justify-items: center;
+  color: var(--animation-hint-color);
+}
+
+.animation-gsap-fade-in__hint {
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.animation-gsap-fade-in__arrow {
+  display: grid;
+  animation: animation-gsap-fade-in-bounce 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-gsap-fade-in__arrow {
+    animation: none;
+  }
+}
+
+@keyframes animation-gsap-fade-in-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animation-gsap-fade-in__list {
+  display: grid;
+  row-gap: 64px;
+  width: 100%;
+  padding-block: 48px 80px;
+}
+
+.animation-gsap-fade-in__item {
+  width: min(72%, 480px);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.animation-gsap-fade-in__item:nth-child(odd) {
+  justify-self: start;
+}
+
+.animation-gsap-fade-in__item:nth-child(even) {
+  justify-self: end;
+}
+
+.animation-gsap-fade-in__image {
+  width: 100%;
+  height: auto;
+}

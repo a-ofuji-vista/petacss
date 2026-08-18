@@ -13,6 +13,18 @@ export type PreviewBridgeMessage =
       type: typeof PREVIEW_BRIDGE_MSG;
       action: "set-color-scheme";
       colorScheme: Theme;
+    }
+  | {
+      type: typeof PREVIEW_BRIDGE_MSG;
+      action: "set-scroll";
+      scrollTop: number;
+      clientHeight: number;
+    }
+  | {
+      type: typeof PREVIEW_BRIDGE_MSG;
+      action: "wheel";
+      deltaY: number;
+      deltaMode: number;
     };
 
 /** iframe 内で計測した高さの上限（resize スプーフィング対策） */

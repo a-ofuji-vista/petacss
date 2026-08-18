@@ -1,0 +1,156 @@
+/* GSAP と ScrollTrigger を CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* Google Fonts の Oswald（SemiBold）が必要です。head.html を <head> に追加してください。 */
+
+/* ループ用の複製は script.js が行います。表示テキストは .animation-scroll-marquee__item を編集してください。 */
+
+/* reset */
+:where(.animation-scroll-marquee) {
+  box-sizing: border-box;
+}
+
+:where(p).animation-scroll-marquee__hint,
+:where(p).animation-scroll-marquee__label,
+:where(section).animation-scroll-marquee__stage {
+  margin: 0;
+}
+
+/* snippet */
+.animation-scroll-marquee {
+  --animation-background: #fff;
+  --animation-hint-color: #5e6775;
+  --animation-label-color: #8b95a5;
+  --marquee-color-accent: #2b36f5;
+  --marquee-color-ink: #111827;
+  --marquee-stage-height: 160vh;
+
+  width: 100%;
+  overflow-x: hidden;
+  overflow-x: clip;
+  color: var(--marquee-color-ink);
+  background-color: var(--animation-background);
+}
+
+.animation-scroll-marquee__intro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-scroll-marquee__outro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-scroll-marquee__scroll-hint {
+  display: grid;
+  row-gap: 8px;
+  justify-items: center;
+  color: var(--animation-hint-color);
+}
+
+.animation-scroll-marquee__hint {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--animation-hint-color);
+  text-align: center;
+}
+
+.animation-scroll-marquee__arrow {
+  display: grid;
+  animation: animation-scroll-marquee-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes animation-scroll-marquee-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animation-scroll-marquee__stage {
+  width: 100%;
+  min-height: var(--marquee-stage-height);
+}
+
+.animation-scroll-marquee__sticky {
+  position: sticky;
+  top: 0;
+  display: grid;
+  row-gap: 20px;
+  align-content: center;
+  min-height: 100vh;
+  padding-block: 32px;
+}
+
+.animation-scroll-marquee__label {
+  padding-inline: 24px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--animation-label-color);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.animation-scroll-marquee__stack {
+  display: grid;
+  row-gap: 0.12em;
+  width: 100%;
+}
+
+.animation-scroll-marquee__row {
+  overflow-x: hidden;
+  overflow-x: clip;
+  color: var(--marquee-color-accent);
+  user-select: none;
+}
+
+.animation-scroll-marquee__row:nth-child(even) {
+  color: var(--marquee-color-ink);
+}
+
+.animation-scroll-marquee__track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.animation-scroll-marquee__group {
+  display: flex;
+  flex-shrink: 0;
+  align-items: baseline;
+}
+
+.animation-scroll-marquee__item {
+  flex-shrink: 0;
+  font-family: Oswald, sans-serif;
+  font-size: clamp(40px, 8.5vw, 80px);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.animation-scroll-marquee__item::after {
+  margin-inline: 0.28em 0.38em;
+  font-size: 0.55em;
+  content: "•";
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-scroll-marquee__arrow {
+    animation: none;
+  }
+
+  .animation-scroll-marquee__track {
+    will-change: auto;
+  }
+}

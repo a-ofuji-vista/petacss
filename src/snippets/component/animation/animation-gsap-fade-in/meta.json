@@ -1,0 +1,9 @@
+{
+  "title": "Animation gsap fade in",
+  "order": 1,
+  "description": "GSAP + ScrollTrigger（CDN）。画面内に入ると下からフェードイン。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewDirection": "column"
+}

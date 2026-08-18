@@ -55,6 +55,7 @@ function setupPreviewIframe(iframe: HTMLIFrameElement): () => void {
     }
 
     root.style.setProperty("--snippet-panel-height", `${effectiveHeight}px`);
+    syncPreviewScroll();
   };
 
   const applyHeight = (height: number) => {
@@ -80,6 +81,20 @@ function setupPreviewIframe(iframe: HTMLIFrameElement): () => void {
   const onMessage = (event: MessageEvent) => {
     if (event.source !== iframe.contentWindow) return;
     if (!isPreviewBridgeMessage(event.data)) return;
+
+    if (event.data.action === "wheel") {
+      const root = iframe.closest(".js-snippet-tabs");
+      const scrollEl = root?.querySelector(".c-snippet-tabs__preview-scroll");
+      if (!(scrollEl instanceof HTMLElement)) return;
+      if (!Number.isFinite(event.data.deltaY)) return;
+
+      let deltaY = event.data.deltaY;
+      if (event.data.deltaMode === 1) deltaY *= 16;
+      if (event.data.deltaMode === 2) deltaY *= scrollEl.clientHeight;
+      scrollEl.scrollTop += deltaY;
+      return;
+    }
+
     if (event.data.action !== "resize") return;
     if (
       typeof event.data.height !== "number" ||
@@ -98,18 +113,59 @@ function setupPreviewIframe(iframe: HTMLIFrameElement): () => void {
       ?.setAttribute("hidden", "");
   };
 
+  let scrollRaf = 0;
+
+  const syncPreviewScroll = () => {
+    const root = iframe.closest(".js-snippet-tabs");
+    if (!(root instanceof HTMLElement)) return;
+    if (!root.classList.contains("c-snippet-tabs--preview-scroll")) return;
+
+    const scrollEl = root.querySelector(".c-snippet-tabs__preview-scroll");
+    if (!(scrollEl instanceof HTMLElement)) return;
+
+    iframe.contentWindow?.postMessage(
+      {
+        type: PREVIEW_BRIDGE_MSG,
+        action: "set-scroll",
+        scrollTop: scrollEl.scrollTop,
+        clientHeight: scrollEl.clientHeight,
+      } satisfies PreviewBridgeMessage,
+      "*",
+    );
+  };
+
+  const schedulePreviewScroll = () => {
+    if (scrollRaf) return;
+    scrollRaf = requestAnimationFrame(() => {
+      scrollRaf = 0;
+      syncPreviewScroll();
+    });
+  };
+
   window.addEventListener("message", onMessage, { signal });
+  window.addEventListener("resize", schedulePreviewScroll, { signal });
   iframe.addEventListener("load", syncColorScheme, { signal });
   iframe.addEventListener("load", hideLoader, { signal });
+  iframe.addEventListener("load", syncPreviewScroll, { signal });
   if (iframe.contentDocument?.readyState === "complete") {
     syncColorScheme();
     hideLoader();
+    syncPreviewScroll();
   }
   matchMedia("(prefers-color-scheme: dark)").addEventListener(
     "change",
     syncColorScheme,
     { signal },
   );
+
+  const root = iframe.closest(".js-snippet-tabs");
+  const scrollEl = root?.querySelector(".c-snippet-tabs__preview-scroll");
+  if (scrollEl instanceof HTMLElement) {
+    scrollEl.addEventListener("scroll", schedulePreviewScroll, {
+      signal,
+      passive: true,
+    });
+  }
 
   const themeObserver = new MutationObserver(syncColorScheme);
   themeObserver.observe(document.documentElement, {
@@ -121,6 +177,7 @@ function setupPreviewIframe(iframe: HTMLIFrameElement): () => void {
     controller.abort();
     themeObserver.disconnect();
     if (heightRaf) cancelAnimationFrame(heightRaf);
+    if (scrollRaf) cancelAnimationFrame(scrollRaf);
   };
 }
 

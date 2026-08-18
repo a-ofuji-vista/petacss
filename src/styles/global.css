@@ -4,6 +4,7 @@
 @import url("./reset.css") layer(reset);
 @import url("highlight.js/styles/base16/dracula.css") layer(highlight);
 @import url("./tokens.css");
+@import url("./scroll-reveal-scrollbar.css");
 
 @layer highlight {
   .hljs {

@@ -97,11 +97,12 @@
   --layout-sidebar-width: 265px;
   --layout-min-width: 275px;
   --layout-header-height: 56px;
+  --layout-sidebar-max-height: calc(100dvh - var(--layout-header-height));
 
   /* z-index */
-  --z-header: 1;
-  --z-nav-dialog: 2;
-  --z-search-dialog: 3;
+  --z-header: 10;
+  --z-nav-dialog: 20;
+  --z-search-dialog: 30;
 
   /* sizing */
   --size-touch-target: 40px;
@@ -121,6 +122,10 @@
   --color-preview-scrollbar-track: var(--color-bg-surface);
   --color-preview-scrollbar-thumb: var(--color-fg-inactive);
   --color-preview-scrollbar-thumb-hover: var(--color-fg-subtle);
+
+  /* sidebar scrollbar */
+  --scrollbar-sidebar-size: var(--space-1);
+  --color-sidebar-scrollbar-thumb: var(--color-fg-inactive);
 }
 
 [data-theme="dark"] {

@@ -12,7 +12,10 @@ interface Props {
 const { headings } = Astro.props;
 ---
 
-<aside class="l-toc js-toc" aria-label="ページ内目次">
+<aside
+  class="l-toc js-toc u-scroll-reveal-scrollbar js-scroll-reveal-scrollbar"
+  aria-label="ページ内目次"
+>
   {
     headings.length > 0 && (
       <>
@@ -42,8 +45,11 @@ const { headings } = Astro.props;
       top: var(--layout-header-height);
       display: block;
       align-self: start;
+      max-height: var(--layout-sidebar-max-height);
       padding-block: var(--space-16);
       padding-inline: var(--space-6);
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
     }
   }
 
@@ -85,4 +91,5 @@ const { headings } = Astro.props;
 
 <script>
   import "../../scripts/toc.ts";
+  import "../../scripts/scroll-reveal-scrollbar.ts";
 </script>

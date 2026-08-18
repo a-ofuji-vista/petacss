@@ -2,8 +2,8 @@ import {
   inlinePreviewAssets,
   inlinePreviewCssAssets,
   inlinePreviewExternalScripts,
-  rewritePreviewMediaUrls,
 } from "./preview-assets.ts";
+import { PREVIEW_RELOAD_ICON_SVG } from "./preview-reload-icon.ts";
 import { PREVIEW_BRIDGE_MSG } from "./preview-bridge.ts";
 import {
   escapeForBodyFragment,
@@ -21,20 +21,18 @@ export {
 } from "./preview-escape.ts";
 
 /**
- * 動画だけは data URI 化せずサイト配信の絶対 URL で読み込むため、
+ * 動画だけは data URI 化せず /snippets/... の URL のまま読み込むため、
  * media-src に配信元オリジンを明示する。sandbox 付き iframe / srcdoc は
  * opaque origin になり 'self' がどのオリジンにも一致しないため。
- * assetBaseUrl は Astro base を含む場合があるので、CSP には origin だけ渡す。
  */
-function buildPreviewCsp(assetBaseUrl: string): string {
-  const mediaOrigin = new URL(assetBaseUrl).origin;
+function buildPreviewCsp(assetOrigin: string): string {
   return [
     "default-src 'none'",
     "style-src 'unsafe-inline' https://fonts.googleapis.com",
     "script-src 'unsafe-inline'",
     "font-src https://fonts.gstatic.com",
     "img-src data: blob:",
-    `media-src data: blob: ${mediaOrigin}`,
+    `media-src data: blob: ${assetOrigin}`,
     "connect-src 'none'",
   ].join("; ");
 }
@@ -45,6 +43,16 @@ function buildPreviewCsp(assetBaseUrl: string): string {
  */
 const PREVIEW_BRIDGE_SCRIPT = escapeForScriptElement(`(function () {
   var MSG = ${JSON.stringify(PREVIEW_BRIDGE_MSG)};
+
+  if (window.opener) {
+    window.opener = null;
+  }
+
+  if (window.parent === window) {
+    document.documentElement.classList.add("preview-standalone");
+    // 別タブでは iframe 用の embed-scroll を外し、document 自体をスクロールさせる。
+    document.documentElement.classList.remove("preview-embed-scroll");
+  }
 
   function getThemeFromHash() {
     var params = new URLSearchParams(location.hash.replace(/^#/, ""));
@@ -70,10 +78,19 @@ const PREVIEW_BRIDGE_SCRIPT = escapeForScriptElement(`(function () {
     applyColorScheme(initialTheme);
   });
 
+  var embedScroll = document.documentElement.classList.contains("preview-embed-scroll");
+
   window.addEventListener("message", function (event) {
     var data = event.data;
-    if (!data || data.type !== MSG || data.action !== "set-color-scheme") return;
-    applyColorScheme(data.colorScheme);
+    if (!data || data.type !== MSG) return;
+    if (data.action === "set-color-scheme") {
+      applyColorScheme(data.colorScheme);
+      return;
+    }
+    if (data.action !== "set-scroll") return;
+    if (!embedScroll || window.parent === window) return;
+    if (typeof data.scrollTop !== "number" || !Number.isFinite(data.scrollTop)) return;
+    document.documentElement.scrollTop = Math.max(0, data.scrollTop);
   });
 
   document.addEventListener(
@@ -85,6 +102,80 @@ const PREVIEW_BRIDGE_SCRIPT = escapeForScriptElement(`(function () {
     },
     true,
   );
+
+  if (embedScroll) {
+    document.addEventListener(
+      "wheel",
+      function (event) {
+        if (window.parent === window) return;
+        event.preventDefault();
+        parent.postMessage(
+          {
+            type: MSG,
+            action: "wheel",
+            deltaY: event.deltaY,
+            deltaMode: event.deltaMode,
+          },
+          "*",
+        );
+      },
+      { passive: false },
+    );
+
+    var lastTouchY = null;
+
+    document.addEventListener(
+      "touchstart",
+      function (event) {
+        if (window.parent === window) return;
+        if (event.touches.length !== 1) {
+          lastTouchY = null;
+          return;
+        }
+        lastTouchY = event.touches[0].clientY;
+      },
+      { passive: true },
+    );
+
+    document.addEventListener(
+      "touchmove",
+      function (event) {
+        if (window.parent === window) return;
+        if (event.touches.length !== 1 || lastTouchY === null) return;
+        event.preventDefault();
+        var currentY = event.touches[0].clientY;
+        var deltaY = lastTouchY - currentY;
+        lastTouchY = currentY;
+        if (deltaY === 0) return;
+        parent.postMessage(
+          {
+            type: MSG,
+            action: "wheel",
+            deltaY: deltaY,
+            deltaMode: 0,
+          },
+          "*",
+        );
+      },
+      { passive: false },
+    );
+
+    document.addEventListener(
+      "touchend",
+      function () {
+        lastTouchY = null;
+      },
+      { passive: true },
+    );
+
+    document.addEventListener(
+      "touchcancel",
+      function () {
+        lastTouchY = null;
+      },
+      { passive: true },
+    );
+  }
 
   function measureHeight() {
     var content = document.querySelector(".preview-content");
@@ -151,11 +242,119 @@ const PREVIEW_BRIDGE_SCRIPT = escapeForScriptElement(`(function () {
   }
 })();`);
 
+/**
+ * previewScroll 時、親のクリップ領域を ScrollTrigger に伝える。
+ * GSAP 読み込み後・スニペット JS より前に置く。
+ */
+const PREVIEW_SCROLL_PROXY_SCRIPT = escapeForScriptElement(`(function () {
+  if (typeof ScrollTrigger === "undefined") return;
+
+  var MSG = ${JSON.stringify(PREVIEW_BRIDGE_MSG)};
+  var inFrame = window.parent !== window;
+  var received = false;
+  var viewHeight = inFrame ? 1 : window.innerHeight;
+  var scroller = document.documentElement;
+
+  if (typeof gsap !== "undefined") {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+
+  ScrollTrigger.scrollerProxy(scroller, {
+    scrollTop: function () {
+      return scroller.scrollTop;
+    },
+    getBoundingClientRect: function () {
+      return {
+        top: 0,
+        left: 0,
+        width: window.innerWidth,
+        height: inFrame ? viewHeight : window.innerHeight,
+      };
+    },
+    pinType: "transform",
+  });
+
+  var updateRaf = 0;
+
+  window.addEventListener("message", function (event) {
+    var data = event.data;
+    if (!data || data.type !== MSG || data.action !== "set-scroll") return;
+    if (typeof data.clientHeight !== "number" || !Number.isFinite(data.clientHeight)) {
+      return;
+    }
+
+    viewHeight = Math.max(1, data.clientHeight);
+    var first = !received;
+    received = true;
+
+    if (first) {
+      ScrollTrigger.refresh();
+      return;
+    }
+
+    if (updateRaf) return;
+    updateRaf = requestAnimationFrame(function () {
+      updateRaf = 0;
+      ScrollTrigger.update();
+    });
+  });
+})();`);
+
+const PREVIEW_RELOAD_SCRIPT = escapeForScriptElement(`(function () {
+  if (window.parent !== window) return;
+  var button = document.querySelector(".preview-reload");
+  if (!button) return;
+  button.addEventListener("click", function () {
+    location.reload();
+  });
+})();`);
+
+const PREVIEW_RELOAD_STYLE = `
+      .preview-reload {
+        display: none;
+      }
+
+      html.preview-standalone .preview-reload {
+        position: fixed;
+        top: var(--space-4);
+        right: var(--space-4);
+        z-index: var(--z-header);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: var(--size-touch-target);
+        height: var(--size-touch-target);
+        padding: 0;
+        color: var(--color-fg-default);
+        cursor: pointer;
+        background-color: var(--color-bg-default);
+        border: 1px solid var(--color-border-default);
+        border-radius: var(--radius-sm);
+      }
+
+      html.preview-standalone .preview-reload:focus-visible {
+        outline: var(--focus-ring-width) solid var(--color-focus);
+        outline-offset: var(--focus-ring-offset);
+      }
+
+      @media (any-hover: hover) {
+        html.preview-standalone .preview-reload {
+          transition: background-color var(--transition-fast);
+        }
+
+        html.preview-standalone .preview-reload:hover {
+          background-color: var(--color-bg-surface);
+        }
+      }
+`;
+
+const PREVIEW_RELOAD_MARKUP = `<button type="button" class="preview-reload" aria-label="プレビューを再読み込み" title="再読み込み">
+      ${PREVIEW_RELOAD_ICON_SVG}
+    </button>
+    <script>${PREVIEW_RELOAD_SCRIPT}<\/script>`;
+
 export interface PreviewDocOptions {
-  /**
-   * Preview 内アセットのベース URL（Astro `base` を含む。末尾スラッシュなし）。
-   * 例: `http://localhost:4321/petacss`
-   */
+  /** プレビュー内の絶対パス（/snippets/... など）を解決するオリジン。 */
   assetOrigin: string;
   resetCss: string;
   tokensCss: string;
@@ -168,6 +367,13 @@ export interface PreviewDocOptions {
   previewDirection?: PreviewDirection;
   previewGap?: string;
   previewBackground?: string;
+  /** 別タブ表示時にプレビュー再読み込みボタンを出す（Animation など） */
+  showPreviewReload?: boolean;
+  /**
+   * プレビュー枠で縦スクロールする。iframe は枠の高さに固定し、
+   * 親のスクロール量を iframe の scrollTop に伝える。
+   */
+  previewScroll?: boolean;
 }
 
 function buildPreviewBodyAttrs({
@@ -216,14 +422,14 @@ export async function buildPreviewDoc({
   previewDirection,
   previewGap,
   previewBackground,
+  showPreviewReload = false,
+  previewScroll = false,
 }: PreviewDocOptions): Promise<string> {
   const safeAssetOrigin = escapeForHtmlAttribute(assetOrigin);
   const safeResetCss = escapeForStyleElement(resetCss);
   const safeTokensCss = escapeForStyleElement(tokensCss);
   const safeCss = escapeForStyleElement(inlinePreviewCssAssets(css));
-  const htmlWithAssets = inlinePreviewAssets(
-    rewritePreviewMediaUrls(html, assetOrigin),
-  );
+  const htmlWithAssets = inlinePreviewAssets(html);
   // スニペット側の HTML だけを対象にエスケープしてから外部スクリプトを埋め込む。
   // 埋め込み後にエスケープすると、フェッチした第三者スクリプトの中身
   // （文字列リテラル等）に `</body>` 等が偶然含まれていた場合に書き換えてしまうため。
@@ -240,7 +446,7 @@ export async function buildPreviewDoc({
     });
 
   return `<!doctype html>
-<html lang="ja">
+<html lang="ja"${previewScroll ? ` class="preview-embed-scroll"` : ""}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -270,6 +476,33 @@ export async function buildPreviewDoc({
         min-height: 100%;
         margin: 0;
         overflow: hidden;
+      }
+
+      html.preview-standalone {
+        overflow: auto;
+        overflow-x: hidden;
+      }
+
+      html.preview-standalone body,
+      html.preview-embed-scroll body {
+        height: auto;
+        overflow: visible;
+      }
+
+      html.preview-embed-scroll {
+        overflow: hidden;
+        overflow-x: hidden;
+        touch-action: none;
+      }
+
+      html.preview-standalone.preview-embed-scroll {
+        overflow: auto;
+        overflow-x: hidden;
+        touch-action: auto;
+      }
+
+      html.preview-standalone .preview-body--center {
+        align-items: flex-start;
       }
 
       .preview-body {
@@ -318,6 +551,7 @@ export async function buildPreviewDoc({
         align-items: flex-start;
         justify-content: flex-start;
       }
+      ${showPreviewReload ? PREVIEW_RELOAD_STYLE : ""}
     </style>
     <style>${safeCss}</style>
   </head>
@@ -325,12 +559,14 @@ export async function buildPreviewDoc({
     <div class="preview-content${previewPadding ? "" : " preview-content--bleed"}">
       ${safeHtml}
     </div>
+    <script>${PREVIEW_SCROLL_PROXY_SCRIPT}<\/script>
     ${
       // defer はインラインスクリプト（src なし）には効果がないため付与しない。
       // .preview-content 内で埋め込まれた外部スクリプトは同期的に実行されるので、
       // 出現順がこの <script> より前である限り実行順は保証される。
       safeJs ? `<script>${safeJs}<\/script>` : ""
     }
+    ${showPreviewReload ? PREVIEW_RELOAD_MARKUP : ""}
   </body>
 </html>`;
 }

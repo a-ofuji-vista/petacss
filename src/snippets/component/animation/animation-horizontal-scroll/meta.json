@@ -1,0 +1,10 @@
+{
+  "title": "Animation horizontal scroll",
+  "order": 3,
+  "description": "GSAP + ScrollTrigger（CDN）。縦スクロールに連動して横方向に移動。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewPadding": false,
+  "previewDirection": "column"
+}

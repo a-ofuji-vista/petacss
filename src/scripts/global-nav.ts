@@ -19,11 +19,21 @@ function setupGlobalNav(root: HTMLElement): () => void {
     ".js-global-nav-close",
   );
 
-  openButton?.addEventListener("click", () => dialog.showModal(), { signal });
-  closeButton?.addEventListener("click", () => dialog.close(), { signal });
+  const open = () => {
+    if (dialog.open) return;
+    dialog.showModal();
+  };
+
+  const close = () => {
+    if (!dialog.open) return;
+    dialog.close();
+  };
+
+  openButton?.addEventListener("click", open, { signal });
+  closeButton?.addEventListener("click", close, { signal });
 
   for (const link of dialog.querySelectorAll("a[href]")) {
-    link.addEventListener("click", () => dialog.close(), { signal });
+    link.addEventListener("click", close, { signal });
   }
 
   const suppressTransition = () => {

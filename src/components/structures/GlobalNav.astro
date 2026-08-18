@@ -6,7 +6,9 @@ const tree = getCategoryTree();
 const current = stripBase(Astro.url.pathname);
 ---
 
-<div class="l-global-nav js-global-nav">
+<div
+  class="l-global-nav js-global-nav u-scroll-reveal-scrollbar js-scroll-reveal-scrollbar"
+>
   <dialog
     id="l-global-nav-dialog"
     class="l-global-nav__dialog js-global-nav-dialog"
@@ -70,14 +72,14 @@ const current = stripBase(Astro.url.pathname);
               <h2 class="l-global-nav__heading">{category}</h2>
               <ul class="l-global-nav__list">
                 {subCategories.map((sub) => {
-                  const path = `/snippets/${sub.slug}`;
+                  const subPath = `/snippets/${sub.slug}`;
                   const href = withBase(`snippets/${sub.slug}`);
                   return (
                     <li class="l-global-nav__item">
                       <a
                         class:list={[
                           "l-global-nav__link",
-                          current.startsWith(path) &&
+                          current.startsWith(subPath) &&
                             "l-global-nav__link--active",
                         ]}
                         href={href}
@@ -107,8 +109,11 @@ const current = stripBase(Astro.url.pathname);
       top: var(--layout-header-height);
       display: block;
       align-self: start;
+      max-height: var(--layout-sidebar-max-height);
       padding-block: var(--space-16);
       padding-inline: var(--space-6);
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
     }
   }
 
@@ -288,4 +293,5 @@ const current = stripBase(Astro.url.pathname);
 
 <script>
   import "../../scripts/global-nav.ts";
+  import "../../scripts/scroll-reveal-scrollbar.ts";
 </script>
