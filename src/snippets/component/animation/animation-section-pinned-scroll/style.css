@@ -1,0 +1,287 @@
+/* GSAP と ScrollTrigger を CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* --animation-viewport-height でピン留めする領域の高さを変更できます。 */
+
+/* 本番で画面全体を固定する場合は 100vh を指定してください。 */
+
+/* --animation-media-aspect-ratio で画像の比率を変更できます。 */
+
+/* --animation-content-width でコンテンツ幅を変更できます。 */
+
+/* 進捗ドットは script.js がスライド数に合わせて生成します。 */
+
+/* reset */
+:where(.animation-section-pinned-scroll) {
+  box-sizing: border-box;
+}
+
+:where(p).animation-section-pinned-scroll__hint,
+:where(figure).animation-section-pinned-scroll__slide,
+:where(figcaption).animation-section-pinned-scroll__body,
+:where(ol).animation-section-pinned-scroll__progress {
+  margin: 0;
+}
+
+:where(img).animation-section-pinned-scroll__image {
+  display: block;
+}
+
+/* snippet */
+.animation-section-pinned-scroll {
+  --animation-hint-color: #5e6775;
+  --animation-caption-color: #1a1f2b;
+  --animation-caption-muted: #5e6775;
+  --animation-progress-color: #c5cad3;
+  --animation-viewport-height: min(400px, 100vh);
+  --animation-content-width: 960px;
+  --animation-media-aspect-ratio: 3 / 2;
+  --animation-media-radius: 12px;
+
+  width: 100%;
+  color: var(--animation-caption-color);
+}
+
+.animation-section-pinned-scroll__intro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-section-pinned-scroll__outro {
+  display: grid;
+  place-items: center;
+  min-height: max(400px, calc(100vh - var(--animation-viewport-height)));
+  padding: 24px;
+}
+
+.animation-section-pinned-scroll__scroll-hint {
+  display: grid;
+  row-gap: 8px;
+  justify-items: center;
+  color: var(--animation-hint-color);
+}
+
+.animation-section-pinned-scroll__hint {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--animation-hint-color);
+  text-align: center;
+}
+
+.animation-section-pinned-scroll__arrow {
+  display: grid;
+  animation: animation-section-pinned-scroll-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes animation-section-pinned-scroll-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animation-section-pinned-scroll__section {
+  width: 100%;
+}
+
+.animation-section-pinned-scroll__viewport {
+  position: relative;
+  width: 100%;
+  max-width: var(--animation-content-width);
+  padding-inline: 24px;
+  margin-inline: auto;
+}
+
+.animation-section-pinned-scroll__slides {
+  display: grid;
+  row-gap: 24px;
+}
+
+.animation-section-pinned-scroll__slide {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  min-width: 0;
+  overflow: hidden;
+  color: var(--animation-caption-color);
+
+  @media (width >= 480px) {
+    grid-template-columns: minmax(0, 1.2fr) minmax(160px, 1fr);
+    align-items: center;
+    min-height: var(--animation-viewport-height);
+  }
+}
+
+.animation-section-pinned-scroll__media {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: var(--animation-media-aspect-ratio);
+  overflow: hidden;
+  border-radius: var(--animation-media-radius);
+}
+
+.animation-section-pinned-scroll__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.animation-section-pinned-scroll__body {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+  padding: 16px 24px 24px;
+
+  @media (width >= 480px) {
+    align-content: center;
+    padding: 24px;
+  }
+}
+
+.animation-section-pinned-scroll__index {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.animation-section-pinned-scroll__title {
+  margin-top: 8px;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.animation-section-pinned-scroll__text {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--animation-caption-muted);
+}
+
+.animation-section-pinned-scroll__progress {
+  display: none;
+  padding: 0;
+  list-style: none;
+}
+
+.js-animation-section-pinned-scroll--active
+  .animation-section-pinned-scroll__viewport {
+  position: sticky;
+  top: max(0px, calc((100% - var(--animation-viewport-height)) / 2));
+  display: grid;
+  min-height: 0;
+  overflow: hidden;
+
+  @media (width >= 480px) {
+    height: var(--animation-viewport-height);
+  }
+}
+
+.js-animation-section-pinned-scroll--active
+  .animation-section-pinned-scroll__slides {
+  display: grid;
+  grid-area: 1 / 1;
+  grid-template: 1fr / 1fr;
+  row-gap: 0;
+  min-height: 0;
+
+  @media (width >= 480px) {
+    height: 100%;
+  }
+}
+
+.js-animation-section-pinned-scroll--active
+  .animation-section-pinned-scroll__slide {
+  visibility: hidden;
+  grid-area: 1 / 1;
+  min-height: 0;
+  pointer-events: none;
+  opacity: 0;
+
+  @media (width >= 480px) {
+    height: 100%;
+  }
+}
+
+.js-animation-section-pinned-scroll--active
+  .js-animation-section-pinned-scroll__slide--current {
+  visibility: visible;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.js-animation-section-pinned-scroll--active
+  .animation-section-pinned-scroll__body {
+  padding-block-end: 40px;
+
+  @media (width >= 480px) {
+    padding-block-end: 24px;
+    padding-inline-end: 40px;
+  }
+}
+
+.js-animation-section-pinned-scroll--active
+  .animation-section-pinned-scroll__progress {
+  z-index: 2;
+  display: grid;
+  grid-area: 1 / 1;
+  grid-auto-flow: column;
+  column-gap: 8px;
+  place-self: end center;
+  min-width: 0;
+  margin-block-end: 16px;
+
+  @media (width >= 480px) {
+    grid-auto-rows: max-content;
+    grid-auto-flow: row;
+    row-gap: 8px;
+    place-self: center end;
+    margin-block-end: 0;
+    margin-inline-end: 16px;
+  }
+}
+
+.animation-section-pinned-scroll__progress-item {
+  width: 6px;
+  height: 6px;
+  background-color: var(--animation-progress-color);
+  border-radius: 999px;
+}
+
+.js-animation-section-pinned-scroll__progress-item--current {
+  width: 16px;
+  background-color: var(--animation-caption-color);
+
+  @media (width >= 480px) {
+    width: 6px;
+    height: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js-animation-section-pinned-scroll--active
+    .animation-section-pinned-scroll__slide {
+    transition:
+      opacity 0.45s ease,
+      visibility 0.45s ease;
+  }
+
+  .js-animation-section-pinned-scroll--active
+    .animation-section-pinned-scroll__progress-item {
+    transition:
+      width 0.35s ease,
+      height 0.35s ease,
+      background-color 0.35s ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-section-pinned-scroll__arrow {
+    animation: none;
+  }
+}

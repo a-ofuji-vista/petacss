@@ -1,0 +1,10 @@
+{
+  "title": "Animation section pinned scroll",
+  "order": 5,
+  "description": "GSAP + ScrollTrigger（CDN）。スクロール中に画面を固定し、コンテンツだけが切り替わる。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewPadding": false,
+  "previewDirection": "column"
+}

@@ -109,12 +109,12 @@ npm run preview
 
 複数スニペットの Preview から参照する画像・動画を置きます。リポジトリに含めるため clone サイズに影響します。
 
-| ファイル          | 概算サイズ | 用途                             |
-| ----------------- | ---------- | -------------------------------- |
-| `card-sample.jpg` | ~330 KB    | カード・カルーセル系スニペット   |
-| `bg_noise.png`    | ~85 KB     | ノイズテクスチャ背景             |
-| `bg-video.webm`   | —          | GitHub Releases から取得（下記） |
-| `bg-video.mp4`    | —          | GitHub Releases から取得（下記） |
+| ファイル             | 概算サイズ | 用途                             |
+| -------------------- | ---------- | -------------------------------- |
+| `card-sample-01.jpg` | ~330 KB    | カード・カルーセル系スニペット   |
+| `bg_noise.png`       | ~85 KB     | ノイズテクスチャ背景             |
+| `bg-video.webm`      | —          | GitHub Releases から取得（下記） |
+| `bg-video.mp4`       | —          | GitHub Releases から取得（下記） |
 
 Video bg スニペットの Preview 用動画はリポジトリサイズの都合で Git に含めず、**GitHub Releases**（タグ `assets-v1`）に置いています。Releases の直リンクは `Content-Disposition: attachment` のため `<video>` で再生できないので、`npm run predev` / `prebuild`（または `npm run fetch:videos`）で `public/snippets/` へ取得し、同一オリジンから配信します（`.gitignore` 対象）。動画が読み込めない環境では CSS の `--video-fallback` 下地が表示されます。
 

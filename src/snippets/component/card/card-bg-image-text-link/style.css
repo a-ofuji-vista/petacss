@@ -12,7 +12,7 @@
 
 /* snippet */
 .card-bg-image-text-link {
-  --card-background-image: url("/snippets/card-sample.jpg");
+  --card-background-image: url("/snippets/card-sample-01.jpg");
   --card-overlay: linear-gradient(
     to top,
     rgb(0 0 0 / 70%) 0%,
