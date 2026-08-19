@@ -49,7 +49,6 @@ const previewDoc = await buildPreviewDoc({
   html,
   js,
   head,
-  title,
   previewPlacement,
   previewPadding,
   previewDirection,
@@ -142,11 +141,9 @@ const snippetTabsStyle = [
           </button>
         )
       }
-      <a
+      <button
         class="c-snippet-tabs__action js-open-preview-tab"
-        href={`/preview/${id}`}
-        target="_blank"
-        rel="noopener noreferrer"
+        type="button"
         aria-label={`${title} のプレビューを別タブで開く`}
         data-tooltip="別タブで開く"
       >
@@ -170,7 +167,7 @@ const snippetTabsStyle = [
             stroke-linecap="round"
             stroke-linejoin="round"></path>
         </svg>
-      </a>
+      </button>
     </div>
   </div>
 
@@ -307,8 +304,6 @@ const snippetTabsStyle = [
     width: var(--size-touch-target);
     height: var(--size-touch-target);
     padding: 0;
-    color: inherit;
-    text-decoration: none;
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
   }

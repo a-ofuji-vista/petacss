@@ -117,12 +117,6 @@ function pickBySlug<T>(map: Record<string, T>, slug: string): T | undefined {
   return entry?.[1];
 }
 
-export function shouldShowPreviewReload(
-  snippet: Pick<Snippet, "subCategorySlug">,
-): boolean {
-  return snippet.subCategorySlug === "animation";
-}
-
 export function formatSnippetHtmlForDisplay(
   html: string,
   head?: string,

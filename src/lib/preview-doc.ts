@@ -304,12 +304,7 @@ const PREVIEW_RELOAD_SCRIPT = escapeForScriptElement(`(function () {
   if (window.parent !== window) return;
   var button = document.querySelector(".preview-reload");
   if (!button) return;
-  if ("scrollRestoration" in history) {
-    history.scrollRestoration = "manual";
-  }
   button.addEventListener("click", function () {
-    document.documentElement.scrollTop = 0;
-    document.body.scrollTop = 0;
     location.reload();
   });
 })();`);
@@ -367,8 +362,6 @@ export interface PreviewDocOptions {
   html: string;
   js?: string;
   head?: string;
-  /** ブラウザタブ用タイトル（未指定時は Preview | PETA CSS） */
-  title?: string;
   previewPlacement?: PreviewPlacement;
   previewPadding?: boolean;
   previewDirection?: PreviewDirection;
@@ -424,7 +417,6 @@ export async function buildPreviewDoc({
   html,
   js,
   head,
-  title,
   previewPlacement = "center",
   previewPadding = true,
   previewDirection,
@@ -434,9 +426,6 @@ export async function buildPreviewDoc({
   previewScroll = false,
 }: PreviewDocOptions): Promise<string> {
   const safeAssetOrigin = escapeForHtmlAttribute(assetOrigin);
-  const safeTitle = escapeForHtmlAttribute(
-    title ? `${title} | PETA CSS` : "Preview | PETA CSS",
-  );
   const safeResetCss = escapeForStyleElement(resetCss);
   const safeTokensCss = escapeForStyleElement(tokensCss);
   const safeCss = escapeForStyleElement(inlinePreviewCssAssets(css));
@@ -461,9 +450,8 @@ export async function buildPreviewDoc({
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${safeTitle}</title>
-    <meta name="robots" content="noindex, nofollow" />
-    <!-- /preview や iframe srcdoc から /snippets/... をルート相対で解決するため。 -->
+    <!-- 別タブ表示は blob: URL で開かれ、blob: は opaque path のため
+         /snippets/... を相対解決できない。base で明示しておく。 -->
     <base href="${safeAssetOrigin}/" />
     <meta http-equiv="Content-Security-Policy" content="${buildPreviewCsp(safeAssetOrigin)}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
