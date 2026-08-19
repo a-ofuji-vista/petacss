@@ -1,0 +1,8 @@
+# /preview/* — 別タブプレビュー用。クリックジャッキング防止のため自サイト以外からの iframe 埋め込みを拒否。
+# src/lib/preview-headers.ts の PREVIEW_PAGE_HEADERS と内容を揃えること。
+<IfModule mod_headers.c>
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Content-Security-Policy "frame-ancestors 'self'"
+  Header set Cross-Origin-Opener-Policy "same-origin"
+  Header set Referrer-Policy "same-origin"
+</IfModule>

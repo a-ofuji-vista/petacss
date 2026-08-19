@@ -1,6 +1,6 @@
 ---
 import { getSnippetFeatures } from "../../lib/css-features";
-import type { Snippet } from "../../lib/snippets";
+import { shouldShowPreviewReload, type Snippet } from "../../lib/snippets";
 import FeatureBadges from "./FeatureBadges.astro";
 import SnippetTabs from "./SnippetTabs.astro";
 
@@ -36,7 +36,7 @@ const featureData = getSnippetFeatures(snippet.css, snippet.meta.features);
     previewDirection={snippet.meta.previewDirection}
     previewGap={snippet.meta.previewGap}
     previewBackground={snippet.meta.previewBackground}
-    showPreviewReload={snippet.subCategorySlug === "animation"}
+    showPreviewReload={shouldShowPreviewReload(snippet)}
   />
 </article>
 
