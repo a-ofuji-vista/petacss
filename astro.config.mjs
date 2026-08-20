@@ -27,11 +27,11 @@ function isSelfOrigin(value, host) {
  */
 function isPreviewVideoPath(pathname, base) {
   const normalizedBase = base.replace(/\/+$/, "");
-  const prefixes = normalizedBase && normalizedBase !== "/"
-    ? [normalizedBase, ""]
-    : [""];
+  const prefixes =
+    normalizedBase && normalizedBase !== "/" ? [normalizedBase, ""] : [""];
 
   return prefixes.some((prefix) => {
+    if (prefix && !pathname.startsWith(prefix)) return false;
     const path = pathname.slice(prefix.length);
     return /^\/snippets\/[^?#]+\.(?:mp4|webm)(?:[?#]|$)/.test(path);
   });
@@ -98,5 +98,17 @@ const siteBase = "/petacss";
 export default defineConfig({
   site: "https://a-ofuji-vista.github.io",
   base: siteBase,
-  integrations: [sitemap(), allowSandboxedPreviewMedia(siteBase)],
+  integrations: [
+    sitemap({
+      filter: (page) => {
+        const pathname = new URL(page).pathname;
+        const previewPrefix = `${siteBase}/preview/`;
+        return (
+          !pathname.startsWith(previewPrefix) &&
+          pathname !== `${siteBase}/preview`
+        );
+      },
+    }),
+    allowSandboxedPreviewMedia(siteBase),
+  ],
 });

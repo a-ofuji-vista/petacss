@@ -3,6 +3,7 @@ import CodeBlock from "./CodeBlock.astro";
 import resetCss from "destyle.css/destyle.css?raw";
 import tokensCss from "../../styles/tokens.css?raw";
 import { buildPreviewDoc } from "../../lib/preview-doc.ts";
+import { getAssetOrigin, withBase } from "../../lib/paths.ts";
 import { PREVIEW_RELOAD_ICON_SVG } from "../../lib/preview-reload-icon.ts";
 import type { PreviewDirection, PreviewPlacement } from "../../lib/snippets.ts";
 import { formatSnippetHtmlForDisplay } from "../../lib/snippets.ts";
@@ -42,13 +43,14 @@ const {
 } = Astro.props;
 
 const previewDoc = await buildPreviewDoc({
-  assetOrigin: Astro.url.origin,
+  assetOrigin: getAssetOrigin(Astro.url.origin),
   resetCss,
   tokensCss,
   css,
   html,
   js,
   head,
+  title,
   previewPlacement,
   previewPadding,
   previewDirection,
@@ -141,9 +143,11 @@ const snippetTabsStyle = [
           </button>
         )
       }
-      <button
+      <a
         class="c-snippet-tabs__action js-open-preview-tab"
-        type="button"
+        href={withBase(`preview/${id}`)}
+        target="_blank"
+        rel="noopener noreferrer"
         aria-label={`${title} のプレビューを別タブで開く`}
         data-tooltip="別タブで開く"
       >
@@ -167,7 +171,7 @@ const snippetTabsStyle = [
             stroke-linecap="round"
             stroke-linejoin="round"></path>
         </svg>
-      </button>
+      </a>
     </div>
   </div>
 
@@ -304,6 +308,8 @@ const snippetTabsStyle = [
     width: var(--size-touch-target);
     height: var(--size-touch-target);
     padding: 0;
+    color: inherit;
+    text-decoration: none;
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
   }

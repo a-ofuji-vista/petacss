@@ -1,0 +1,51 @@
+---
+import resetCss from "destyle.css/destyle.css?raw";
+import tokensCss from "../../styles/tokens.css?raw";
+import { getAssetOrigin } from "../../lib/paths.ts";
+import { buildPreviewDoc } from "../../lib/preview-doc.ts";
+import { PREVIEW_PAGE_HEADERS } from "../../lib/preview-headers.ts";
+import {
+  getAllSnippets,
+  shouldShowPreviewReload,
+  type Snippet,
+} from "../../lib/snippets.ts";
+
+export function getStaticPaths() {
+  return getAllSnippets().map((snippet) => ({
+    params: { slug: snippet.slug },
+    props: { snippet },
+  }));
+}
+
+interface Props {
+  snippet: Snippet;
+}
+
+const { snippet } = Astro.props;
+
+const html = await buildPreviewDoc({
+  assetOrigin: getAssetOrigin(Astro.url.origin),
+  resetCss,
+  tokensCss,
+  css: snippet.css,
+  html: snippet.html,
+  js: snippet.js,
+  head: snippet.head,
+  title: snippet.meta.title,
+  previewPlacement: snippet.meta.previewPlacement,
+  previewPadding: snippet.meta.previewPadding,
+  previewDirection: snippet.meta.previewDirection,
+  previewGap: snippet.meta.previewGap,
+  previewBackground: snippet.meta.previewBackground,
+  showPreviewReload: shouldShowPreviewReload(snippet),
+  previewScroll: snippet.meta.previewScroll,
+  enableFrameGuard: true,
+});
+
+return new Response(html, {
+  headers: {
+    "Content-Type": "text/html; charset=utf-8",
+    ...PREVIEW_PAGE_HEADERS,
+  },
+});
+---

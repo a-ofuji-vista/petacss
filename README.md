@@ -81,6 +81,7 @@ npm run preview
 | `/changelog`           | Update History（更新履歴）                      |
 | `/snippets`            | All snippets（すべてのスニペット一覧）          |
 | `/snippets/[category]` | サブカテゴリ別ページ（例： `/snippets/button`） |
+| `/preview/[slug]`      | スニペットの別タブプレビュー（noindex）         |
 
 ## ディレクトリ構成
 

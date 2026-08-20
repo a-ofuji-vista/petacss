@@ -2,9 +2,12 @@ import {
   inlinePreviewAssets,
   inlinePreviewCssAssets,
   inlinePreviewExternalScripts,
+  rewritePreviewAssetUrls,
+  rewritePreviewCssAssetUrls,
 } from "./preview-assets.ts";
 import { PREVIEW_RELOAD_ICON_SVG } from "./preview-reload-icon.ts";
 import { PREVIEW_BRIDGE_MSG } from "./preview-bridge.ts";
+import { PREVIEW_FRAME_GUARD_SCRIPT } from "./preview-frame-guard.ts";
 import {
   escapeForBodyFragment,
   escapeForHtmlAttribute,
@@ -21,18 +24,19 @@ export {
 } from "./preview-escape.ts";
 
 /**
- * 動画だけは data URI 化せず /snippets/... の URL のまま読み込むため、
- * media-src に配信元オリジンを明示する。sandbox 付き iframe / srcdoc は
- * opaque origin になり 'self' がどのオリジンにも一致しないため。
+ * 動画だけは data URI 化せず絶対 URL で読み込むため、media-src に配信元を明示する。
+ * 末尾 `/` でパスプレフィックス一致（/snippets/... を許可）。sandbox 付き iframe /
+ * srcdoc は opaque origin になり 'self' がどのオリジンにも一致しないため。
  */
 function buildPreviewCsp(assetOrigin: string): string {
+  const mediaOrigin = `${assetOrigin.replace(/\/+$/, "")}/`;
   return [
     "default-src 'none'",
     "style-src 'unsafe-inline' https://fonts.googleapis.com",
     "script-src 'unsafe-inline'",
     "font-src https://fonts.gstatic.com",
     "img-src data: blob:",
-    `media-src data: blob: ${assetOrigin}`,
+    `media-src data: blob: ${mediaOrigin}`,
     "connect-src 'none'",
   ].join("; ");
 }
@@ -304,7 +308,12 @@ const PREVIEW_RELOAD_SCRIPT = escapeForScriptElement(`(function () {
   if (window.parent !== window) return;
   var button = document.querySelector(".preview-reload");
   if (!button) return;
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
   button.addEventListener("click", function () {
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     location.reload();
   });
 })();`);
@@ -354,7 +363,7 @@ const PREVIEW_RELOAD_MARKUP = `<button type="button" class="preview-reload" aria
     <script>${PREVIEW_RELOAD_SCRIPT}<\/script>`;
 
 export interface PreviewDocOptions {
-  /** プレビュー内の絶対パス（/snippets/... など）を解決するオリジン。 */
+  /** プレビュー内の /snippets/... を絶対 URL に書き換える際のオリジン（origin + BASE_URL）。 */
   assetOrigin: string;
   resetCss: string;
   tokensCss: string;
@@ -362,6 +371,8 @@ export interface PreviewDocOptions {
   html: string;
   js?: string;
   head?: string;
+  /** ブラウザタブ用タイトル（未指定時は Preview | PETA CSS） */
+  title?: string;
   previewPlacement?: PreviewPlacement;
   previewPadding?: boolean;
   previewDirection?: PreviewDirection;
@@ -374,6 +385,12 @@ export interface PreviewDocOptions {
    * 親のスクロール量を iframe の scrollTop に伝える。
    */
   previewScroll?: boolean;
+  /**
+   * X-Frame-Options 相当のフレームガードを `<head>` 先頭に挿入する。
+   * sandbox 付き埋め込み iframe（opaque origin）では誤作動するため、
+   * /preview/[slug] の単独ページからのみ true にすること。
+   */
+  enableFrameGuard?: boolean;
 }
 
 function buildPreviewBodyAttrs({
@@ -417,6 +434,7 @@ export async function buildPreviewDoc({
   html,
   js,
   head,
+  title,
   previewPlacement = "center",
   previewPadding = true,
   previewDirection,
@@ -424,12 +442,21 @@ export async function buildPreviewDoc({
   previewBackground,
   showPreviewReload = false,
   previewScroll = false,
+  enableFrameGuard = false,
 }: PreviewDocOptions): Promise<string> {
   const safeAssetOrigin = escapeForHtmlAttribute(assetOrigin);
+  const safeTitle = escapeForHtmlAttribute(
+    title ? `${title} | PETA CSS` : "Preview | PETA CSS",
+  );
   const safeResetCss = escapeForStyleElement(resetCss);
   const safeTokensCss = escapeForStyleElement(tokensCss);
-  const safeCss = escapeForStyleElement(inlinePreviewCssAssets(css));
-  const htmlWithAssets = inlinePreviewAssets(html);
+  const safeCss = escapeForStyleElement(
+    rewritePreviewCssAssetUrls(inlinePreviewCssAssets(css), assetOrigin),
+  );
+  const htmlWithAssets = rewritePreviewAssetUrls(
+    inlinePreviewAssets(html),
+    assetOrigin,
+  );
   // スニペット側の HTML だけを対象にエスケープしてから外部スクリプトを埋め込む。
   // 埋め込み後にエスケープすると、フェッチした第三者スクリプトの中身
   // （文字列リテラル等）に `</body>` 等が偶然含まれていた場合に書き換えてしまうため。
@@ -449,10 +476,11 @@ export async function buildPreviewDoc({
 <html lang="ja"${previewScroll ? ` class="preview-embed-scroll"` : ""}>
   <head>
     <meta charset="utf-8" />
+    ${enableFrameGuard ? `<script>${PREVIEW_FRAME_GUARD_SCRIPT}<\/script>` : ""}
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- 別タブ表示は blob: URL で開かれ、blob: は opaque path のため
-         /snippets/... を相対解決できない。base で明示しておく。 -->
-    <base href="${safeAssetOrigin}/" />
+    <title>${safeTitle}</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="same-origin" />
     <meta http-equiv="Content-Security-Policy" content="${buildPreviewCsp(safeAssetOrigin)}" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

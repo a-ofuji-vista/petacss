@@ -16,6 +16,7 @@ const IMAGE_MIME: Record<string, string> = {
 // 動画 (mp4/webm) は意図的に含めない。data URI 化に向かないため URL のまま配信する
 // （詳細は inlinePreviewAssets の doc コメントを参照）。安易に拡張子を追加しないこと。
 const IMAGE_EXT = "(?:gif|jpe?g|png|svg|webp)";
+const PUBLIC_SNIPPET_PATH = `\\/snippets\\/[^"'\\)\\s]+`;
 const PUBLIC_IMAGE_PATH = `\\/[^"'\\)\\s]+\\.${IMAGE_EXT}`;
 
 const SRC_ATTR_PATTERN = new RegExp(
@@ -26,6 +27,11 @@ const CSS_URL_PATTERN = new RegExp(
   `url\\(\\s*(["']?)(${PUBLIC_IMAGE_PATH})\\1\\s*\\)`,
   "gi",
 );
+
+function toAbsoluteAssetUrl(assetOrigin: string, assetPath: string): string {
+  const normalizedOrigin = assetOrigin.replace(/\/+$/, "");
+  return `${normalizedOrigin}${assetPath}`;
+}
 
 function inlinePublicAsset(assetPath: string): string | undefined {
   const filePath = path.normalize(path.join(PUBLIC_DIR, assetPath.slice(1)));
@@ -61,6 +67,45 @@ export function inlinePreviewAssets(html: string): string {
     const inlined = inlinePublicAsset(assetPath);
     return inlined ? `src=${quote}${inlined}${quote}` : match;
   });
+}
+
+const SNIPPET_SRC_ATTR_PATTERN = new RegExp(
+  `src=(["'])(${PUBLIC_SNIPPET_PATH})\\1`,
+  "gi",
+);
+const SNIPPET_CSS_URL_PATTERN = new RegExp(
+  `url\\(\\s*(["']?)(${PUBLIC_SNIPPET_PATH})\\1\\s*\\)`,
+  "gi",
+);
+
+/**
+ * Preview 用 HTML 内の /snippets/... を assetOrigin 付きの絶対 URL に差し替える。
+ * 画像は inlinePreviewAssets で data URI 化済みのため、主に動画 src が対象。
+ * ルート相対パス (/snippets/...) は <base href> では base パスが無視されるため、
+ * 文字列置換で解決する。
+ */
+export function rewritePreviewAssetUrls(
+  html: string,
+  assetOrigin: string,
+): string {
+  return html.replace(SNIPPET_SRC_ATTR_PATTERN, (_match, quote, assetPath) => {
+    return `src=${quote}${toAbsoluteAssetUrl(assetOrigin, assetPath)}${quote}`;
+  });
+}
+
+/**
+ * Preview 用 CSS 内の /snippets/... url() を assetOrigin 付きの絶対 URL に差し替える。
+ * 画像は inlinePreviewCssAssets で data URI 化済み。インライン化に失敗した参照のフォールバック。
+ */
+export function rewritePreviewCssAssetUrls(
+  css: string,
+  assetOrigin: string,
+): string {
+  return css.replace(
+    SNIPPET_CSS_URL_PATTERN,
+    (_match, quote, assetPath) =>
+      `url(${quote}${toAbsoluteAssetUrl(assetOrigin, assetPath)}${quote})`,
+  );
 }
 
 /**
