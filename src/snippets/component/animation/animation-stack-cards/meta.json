@@ -1,0 +1,10 @@
+{
+  "title": "Animation stack cards",
+  "order": 7,
+  "description": "GSAP（CDN）。重ねる動きは CSS sticky。左テキスト・右画像のワイドカードが、スクロールで下から垂直に重なる。スマホ幅ではアニメーションなし。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewPadding": false,
+  "previewDirection": "column"
+}
