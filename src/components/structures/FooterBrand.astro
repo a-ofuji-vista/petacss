@@ -1,14 +1,11 @@
 ---
 import { withBase } from "../../lib/paths.ts";
 
-const mascotSrc = withBase("brand/mascot.svg");
+const mascotSrc = withBase("brand/mascot.gif");
 const wordmarkUrl = `url("${withBase("brand/wordmark.svg")}")`;
 ---
 
-<div
-  class="l-footer-brand"
-  style={`--footer-brand-wordmark: ${wordmarkUrl}`}
->
+<div class="l-footer-brand" style={`--footer-brand-wordmark: ${wordmarkUrl}`}>
   <img
     class="l-footer-brand__mascot"
     src={mascotSrc}
