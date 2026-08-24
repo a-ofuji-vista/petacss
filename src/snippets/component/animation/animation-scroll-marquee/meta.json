@@ -1,7 +1,7 @@
 {
   "title": "Animation scroll marquee",
   "order": 4,
-  "description": "GSAP + ScrollTrigger（CDN）。スクロール連動のマーキー。Google Fonts の Oswald（SemiBold）が必要です。",
+  "description": "GSAP + ScrollTrigger（CDN）。スクロール連動のマーキー。テキストのみ／テキスト＋画像。Google Fonts の Oswald（SemiBold）が必要です。",
   "previewScroll": true,
   "previewBackground": "#fff",
   "previewPlacement": "start",

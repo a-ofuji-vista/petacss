@@ -4,6 +4,8 @@
 
 /* ループ用の複製は script.js が行います。表示テキストは .animation-scroll-marquee__item を編集してください。 */
 
+/* テキストと画像を交互に並べる場合は、行に --media を付け、.animation-scroll-marquee__media で画像を挟んでください。 */
+
 /* reset */
 :where(.animation-scroll-marquee) {
   box-sizing: border-box;
@@ -13,6 +15,11 @@
 :where(p).animation-scroll-marquee__label,
 :where(section).animation-scroll-marquee__stage {
   margin: 0;
+}
+
+:where(img).animation-scroll-marquee__media,
+:where(span).animation-scroll-marquee__media {
+  display: block;
 }
 
 /* snippet */
@@ -109,7 +116,12 @@
 .animation-scroll-marquee__row {
   overflow-x: hidden;
   overflow-x: clip;
+  font-family: Oswald, sans-serif;
+  font-size: clamp(40px, 8.5vw, 80px);
+  font-weight: 600;
+  line-height: 1;
   color: var(--marquee-color-accent);
+  letter-spacing: 0.04em;
   user-select: none;
 }
 
@@ -131,11 +143,6 @@
 
 .animation-scroll-marquee__item {
   flex-shrink: 0;
-  font-family: Oswald, sans-serif;
-  font-size: clamp(40px, 8.5vw, 80px);
-  font-weight: 600;
-  line-height: 1;
-  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
@@ -143,6 +150,26 @@
   margin-inline: 0.28em 0.38em;
   font-size: 0.55em;
   content: "•";
+}
+
+.animation-scroll-marquee__row--media .animation-scroll-marquee__group {
+  column-gap: 0.32em;
+  align-items: center;
+  padding-inline-end: 0.32em;
+}
+
+.animation-scroll-marquee__row--media .animation-scroll-marquee__item::after {
+  content: none;
+}
+
+.animation-scroll-marquee__media {
+  flex-shrink: 0;
+  width: calc(0.8em * 8 / 5);
+  height: 0.8em;
+  object-fit: cover;
+  background-position: center;
+  background-size: cover;
+  border-radius: 0.16em;
 }
 
 @media (prefers-reduced-motion: reduce) {
