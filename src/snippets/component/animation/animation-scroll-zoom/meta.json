@@ -1,0 +1,10 @@
+{
+  "title": "Animation scroll zoom",
+  "order": 6,
+  "description": "GSAP + ScrollTrigger（CDN）。スクロールで画像が画面いっぱいに近づき、中央にテキストが表示される。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewPadding": false,
+  "previewDirection": "column"
+}
