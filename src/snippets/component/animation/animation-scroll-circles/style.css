@@ -1,0 +1,201 @@
+/* GSAP と ScrollTrigger を CDN から読み込んでください（HTML 内 script 参照）。 */
+
+/* --animation-ring-left / --animation-ring-right で円の色を変更できます。 */
+
+/* --animation-ring-left-size / --animation-ring-right-size で円の大きさを変更できます。 */
+
+/* --animation-stage-height でセクションの高さを変更できます。 */
+
+/* タイトル・本文の font-size と円の大きさはウィンドウ幅に合わせて変わります。 */
+
+/* reset */
+:where(.animation-scroll-circles) {
+  box-sizing: border-box;
+}
+
+:where(p).animation-scroll-circles__hint,
+:where(p).animation-scroll-circles__catch,
+:where(p).animation-scroll-circles__title,
+:where(p).animation-scroll-circles__text {
+  margin: 0;
+}
+
+:where(svg).animation-scroll-circles__ring {
+  display: block;
+}
+
+/* snippet */
+.animation-scroll-circles {
+  --animation-background: #fff;
+  --animation-hint-color: #5e6775;
+  --animation-title-color: #1a1f2b;
+  --animation-text-color: #5e6775;
+  --animation-ring-left: #b7bbf1;
+  --animation-ring-right: #6b72f6;
+  --animation-ring-left-size: 70vw;
+  --animation-ring-right-size: 58vw;
+  --animation-stage-height: max(
+    min(100vh, var(--animation-ring-left-size)),
+    20rem
+  );
+
+  width: 100%;
+  color: var(--animation-title-color);
+  background-color: var(--animation-background);
+}
+
+.animation-scroll-circles__intro {
+  display: grid;
+  place-items: center;
+  min-height: 400px;
+  padding: 24px;
+}
+
+.animation-scroll-circles__scroll-hint {
+  display: grid;
+  row-gap: 8px;
+  justify-items: center;
+  color: var(--animation-hint-color);
+}
+
+.animation-scroll-circles__hint {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--animation-hint-color);
+  text-align: center;
+}
+
+.animation-scroll-circles__arrow {
+  display: grid;
+  animation: animation-scroll-circles-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes animation-scroll-circles-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.animation-scroll-circles__section {
+  width: 100%;
+}
+
+.animation-scroll-circles__stage {
+  position: relative;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  min-height: var(--animation-stage-height);
+  background-color: var(--animation-background);
+}
+
+.animation-scroll-circles__rings,
+.animation-scroll-circles__copy {
+  grid-area: 1 / 1;
+}
+
+.animation-scroll-circles__rings {
+  z-index: 0;
+  display: grid;
+  grid-template: 1fr / 1fr;
+  place-self: stretch;
+  min-height: var(--animation-stage-height);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.animation-scroll-circles__ring {
+  z-index: 0;
+  grid-area: 1 / 1;
+  width: var(--animation-ring-left-size);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.animation-scroll-circles__ring--left {
+  place-self: start start;
+  color: var(--animation-ring-left);
+  transform: translate(-34%, -36%);
+}
+
+.animation-scroll-circles__ring--right {
+  place-self: center end;
+  width: var(--animation-ring-right-size);
+  color: var(--animation-ring-right);
+  transform: translate(36%, 4%);
+}
+
+.animation-scroll-circles__circle {
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 22;
+  stroke-linecap: butt;
+  /* 円周（r=74 で約 465）より大きい値。JS 前のフル表示フラッシュを防ぐ */
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.animation-scroll-circles__copy {
+  z-index: 1;
+  display: grid;
+  gap: clamp(8px, 0.8vw, 16px);
+  place-content: center;
+  place-self: center start;
+  width: min(clamp(16rem, 42vw, 48rem), calc(100% - 48px));
+  padding-block: clamp(24px, 4vw, 64px);
+  margin-left: 8%;
+  text-align: left;
+  transform: translateY(-12%);
+}
+
+.animation-scroll-circles__catch {
+  font-size: clamp(28px, 5.5vw, 80px);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--animation-title-color);
+  letter-spacing: 0.02em;
+}
+
+.animation-scroll-circles__title {
+  font-size: clamp(16px, 2vw, 28px);
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--animation-title-color);
+}
+
+.animation-scroll-circles__text {
+  max-width: 100%;
+  font-size: clamp(13px, 1.4vw, 22px);
+  line-height: 1.7;
+  color: var(--animation-text-color);
+  overflow-wrap: anywhere;
+}
+
+@media (width > 960px) {
+  .animation-scroll-circles__ring--left {
+    transform: translate(-32%, -30%);
+  }
+
+  .animation-scroll-circles__ring--right {
+    transform: translate(32%, 6%);
+  }
+
+  .animation-scroll-circles__copy {
+    margin-left: 12%;
+    transform: translateY(-20%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animation-scroll-circles__arrow {
+    animation: none;
+  }
+
+  .animation-scroll-circles__circle {
+    stroke-dashoffset: 0;
+  }
+}

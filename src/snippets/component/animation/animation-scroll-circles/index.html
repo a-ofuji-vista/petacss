@@ -1,0 +1,68 @@
+<div class="animation-scroll-circles js-animation-scroll-circles">
+  <div class="animation-scroll-circles__intro">
+    <div class="animation-scroll-circles__scroll-hint">
+      <p class="animation-scroll-circles__hint">
+        スクロールすると、左の円から時計回りに描画されます
+      </p>
+      <span class="animation-scroll-circles__arrow" aria-hidden="true">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path
+            d="M4 6l4 4 4-4"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </span>
+    </div>
+  </div>
+
+  <div
+    class="animation-scroll-circles__section"
+    role="region"
+    aria-label="スクロールで描画される円"
+  >
+    <div class="animation-scroll-circles__stage">
+      <div class="animation-scroll-circles__rings" aria-hidden="true">
+        <svg
+          class="animation-scroll-circles__ring animation-scroll-circles__ring--left"
+          viewBox="0 0 200 200"
+          fill="none"
+        >
+          <circle
+            class="animation-scroll-circles__circle animation-scroll-circles__circle--left"
+            cx="100"
+            cy="100"
+            r="74"
+            transform="rotate(180 100 100)"
+          />
+        </svg>
+
+        <svg
+          class="animation-scroll-circles__ring animation-scroll-circles__ring--right"
+          viewBox="0 0 200 200"
+          fill="none"
+        >
+          <circle
+            class="animation-scroll-circles__circle animation-scroll-circles__circle--right"
+            cx="100"
+            cy="100"
+            r="74"
+          />
+        </svg>
+      </div>
+
+      <div class="animation-scroll-circles__copy">
+        <p class="animation-scroll-circles__catch">Animation scroll circles</p>
+        <p class="animation-scroll-circles__title">見出しテキスト</p>
+        <p class="animation-scroll-circles__text">
+          文章テキスト文章テキスト文章テキスト文章テキスト文章テキスト文章テキスト文章テキスト文章テキスト文章テキスト
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://unpkg.com/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://unpkg.com/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>

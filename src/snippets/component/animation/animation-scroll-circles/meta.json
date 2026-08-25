@@ -1,0 +1,10 @@
+{
+  "title": "Animation scroll circles",
+  "order": 8,
+  "description": "GSAP + ScrollTrigger（CDN）。スクロールで左の円が時計回りに描画され、続いて右の円も時計回りに描画される。",
+  "previewScroll": true,
+  "previewBackground": "#fff",
+  "previewPlacement": "start",
+  "previewPadding": false,
+  "previewDirection": "column"
+}
